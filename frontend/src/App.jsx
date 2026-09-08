@@ -1,13 +1,16 @@
 import React, { useState } from 'react';
-import DietInputForm from './components/DietInputForm';
+import StructuredMealLog from './components/StructuredMealLog';
 import AnalysisResult from './components/AnalysisResult';
+import UserProfile from './components/UserProfile';
+import InsightsDashboard from './components/InsightsDashboard';
 
 function App() {
+  const [activeTab, setActiveTab] = useState('analyze');
   const [isLoading, setIsLoading] = useState(false);
   const [analysisResult, setAnalysisResult] = useState(null);
   const [error, setError] = useState(null);
 
-  const handleAnalyze = async (dietText) => {
+  const handleAnalyze = async (dailyLogs, daysLogged) => {
     setIsLoading(true);
     setError(null);
     try {
@@ -16,11 +19,11 @@ function App() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ diet_text: dietText }),
+        body: JSON.stringify({ daily_logs: dailyLogs, days_logged: daysLogged }),
       });
 
       if (!response.ok) {
-        throw new Error('Failed to analyze diet. Please make sure the backend is running.');
+        throw new Error('Failed to analyze diet. Please make sure the backend is running and API key is set.');
       }
 
       const data = await response.json();
@@ -40,11 +43,17 @@ function App() {
 
   return (
     <div className="container">
-      <header className="header animate-fade-in">
+      <header className="header animate-fade-in" style={{ paddingBottom: '2rem' }}>
         <h1 className="text-gradient">AI Nutrition Planner</h1>
-        <p style={{ fontSize: '1.2rem', maxWidth: '600px', margin: '0 auto' }}>
+        <p style={{ fontSize: '1.2rem', maxWidth: '600px', margin: '0 auto', marginBottom: '2rem' }}>
           Discover what nutrients you're missing from your weekly diet and get personalized, actionable supplement recommendations powered by AI.
         </p>
+
+        <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem' }}>
+          <button onClick={() => setActiveTab('analyze')} className="btn-primary" style={{ background: activeTab === 'analyze' ? '' : 'rgba(255,255,255,0.05)', color: 'white', border: activeTab === 'analyze' ? '' : '1px solid var(--glass-border)' }}>Analyze</button>
+          <button onClick={() => setActiveTab('profile')} className="btn-primary" style={{ background: activeTab === 'profile' ? '' : 'rgba(255,255,255,0.05)', color: 'white', border: activeTab === 'profile' ? '' : '1px solid var(--glass-border)' }}>Profile</button>
+          <button onClick={() => setActiveTab('dashboard')} className="btn-primary" style={{ background: activeTab === 'dashboard' ? '' : 'rgba(255,255,255,0.05)', color: 'white', border: activeTab === 'dashboard' ? '' : '1px solid var(--glass-border)' }}>Dashboard</button>
+        </div>
       </header>
 
       <main style={{ maxWidth: '800px', margin: '0 auto' }}>
@@ -54,11 +63,17 @@ function App() {
           </div>
         )}
 
-        {!analysisResult ? (
-          <DietInputForm onAnalyze={handleAnalyze} isLoading={isLoading} />
-        ) : (
-          <AnalysisResult result={analysisResult} onReset={handleReset} />
+        {activeTab === 'analyze' && (
+          !analysisResult ? (
+            <StructuredMealLog onAnalyze={handleAnalyze} isLoading={isLoading} />
+          ) : (
+            <AnalysisResult result={analysisResult} onReset={handleReset} />
+          )
         )}
+
+        {activeTab === 'profile' && <UserProfile />}
+        
+        {activeTab === 'dashboard' && <InsightsDashboard />}
       </main>
     </div>
   );

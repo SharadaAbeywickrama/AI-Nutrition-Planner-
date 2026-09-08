@@ -1,0 +1,100 @@
+[
+  {
+    "id": "1",
+    "name": "Chicken Breast (Cooked, 100g)",
+    "nutrients": {
+      "Protein": 31,
+      "Fat": 3.6,
+      "Carbs": 0,
+      "Iron": 1.0,
+      "Magnesium": 29,
+      "Vitamin B12": 0.3
+    }
+  },
+  {
+    "id": "2",
+    "name": "White Rice (Cooked, 100g)",
+    "nutrients": {
+      "Protein": 2.7,
+      "Fat": 0.3,
+      "Carbs": 28,
+      "Iron": 0.2,
+      "Magnesium": 12,
+      "Vitamin B12": 0
+    }
+  },
+  {
+    "id": "3",
+    "name": "Spinach (Raw, 100g)",
+    "nutrients": {
+      "Protein": 2.9,
+      "Fat": 0.4,
+      "Carbs": 3.6,
+      "Iron": 2.7,
+      "Magnesium": 79,
+      "Vitamin C": 28,
+      "Vitamin A": 469
+    }
+  },
+  {
+    "id": "4",
+    "name": "Salmon (Cooked, 100g)",
+    "nutrients": {
+      "Protein": 25,
+      "Fat": 13,
+      "Carbs": 0,
+      "Omega-3": 2.3,
+      "Vitamin D": 13,
+      "Vitamin B12": 3.2
+    }
+  },
+  {
+    "id": "5",
+    "name": "Oatmeal (Cooked, 100g)",
+    "nutrients": {
+      "Protein": 2.5,
+      "Fat": 1.5,
+      "Carbs": 12,
+      "Fiber": 1.7,
+      "Iron": 0.9,
+      "Magnesium": 26
+    }
+  },
+  {
+    "id": "6",
+    "name": "Almonds (Raw, 100g)",
+    "nutrients": {
+      "Protein": 21,
+      "Fat": 50,
+      "Carbs": 22,
+      "Fiber": 12.5,
+      "Iron": 3.7,
+      "Magnesium": 268,
+      "Calcium": 269
+    }
+  },
+  {
+    "id": "7",
+    "name": "Fast Food Cheeseburger (1 item)",
+    "nutrients": {
+      "Protein": 15,
+      "Fat": 14,
+      "Carbs": 33,
+      "Sodium": 580,
+      "Iron": 2.5,
+      "Calcium": 135
+    }
+  },
+  {
+    "id": "8",
+    "name": "Apple (Medium, 1 item)",
+    "nutrients": {
+      "Protein": 0.5,
+      "Fat": 0.3,
+      "Carbs": 25,
+      "Fiber": 4.4,
+      "Vitamin C": 8.4,
+      "Potassium": 195
+    }
+  }
+]

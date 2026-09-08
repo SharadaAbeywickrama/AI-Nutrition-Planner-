@@ -3,11 +3,12 @@ import { Sparkles, ArrowRight } from 'lucide-react';
 
 const DietInputForm = ({ onAnalyze, isLoading }) => {
   const [dietText, setDietText] = useState('');
+  const [daysLogged, setDaysLogged] = useState(7);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (dietText.trim()) {
-      onAnalyze(dietText);
+      onAnalyze(dietText, daysLogged);
     }
   };
 
@@ -22,6 +23,22 @@ const DietInputForm = ({ onAnalyze, isLoading }) => {
       </p>
 
       <form onSubmit={handleSubmit}>
+        <div className="input-container" style={{ marginBottom: '1rem' }}>
+          <label className="input-label" htmlFor="daysLogged">How many days does this log cover?</label>
+          <select 
+            id="daysLogged" 
+            className="premium-input" 
+            style={{ minHeight: 'auto', padding: '0.75rem', width: '200px' }}
+            value={daysLogged}
+            onChange={(e) => setDaysLogged(parseInt(e.target.value))}
+            disabled={isLoading}
+          >
+            {[1, 2, 3, 4, 5, 6, 7].map(num => (
+              <option key={num} value={num}>{num} Day{num !== 1 ? 's' : ''}</option>
+            ))}
+          </select>
+        </div>
+
         <div className="input-container">
           <label className="input-label" htmlFor="diet">What did you eat?</label>
           <textarea
