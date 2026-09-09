@@ -19,3 +19,24 @@ build/
 # OS
 .DS_Store
 Thumbs.db
+
+# Python
+*.pyo
+.pytest_cache/
+*.egg-info/
+
+# Environment
+.env.local
+.env.production
+
+# Node
+.next/
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+
+# Logs
+*.log
+npm-debug.log*
