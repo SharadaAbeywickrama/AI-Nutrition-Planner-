@@ -1,7 +1,14 @@
 import React, { useState } from 'react';
 
-const InsightsDashboard = () => {
+const InsightsDashboard = ({ profile }) => {
   const [subTab, setSubTab] = useState('Overview');
+
+  const dailyGoal = profile?.goal_weight_kg ? 1850 : 2000;
+  const weeklyGoal = dailyGoal * 7;
+  // Without global log state, we assume 0 consumed for now. 
+  // In a real app, this would sum up the last 7 days of logs.
+  const netAverage = 0; 
+  const underWeeklyGoal = weeklyGoal - (netAverage * 7);
 
   const SubNav = () => (
     <div style={{ display: 'flex', gap: '1.5rem', borderBottom: '1px solid rgba(255,255,255,0.05)', marginBottom: '1.5rem', overflowX: 'auto', paddingBottom: '0.5rem' }}>
@@ -105,15 +112,15 @@ const InsightsDashboard = () => {
           <div style={{ borderBottom: '1px solid rgba(255,255,255,0.05)', paddingBottom: '1rem', marginBottom: '1rem' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.5rem 0' }}>
               <span style={{ color: 'var(--text-secondary)' }}>Net Calories Under Weekly Goal</span>
-              <span>12,950</span>
+              <span style={{ fontWeight: 'bold' }}>{underWeeklyGoal.toLocaleString()}</span>
             </div>
             <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.5rem 0' }}>
               <span style={{ color: 'var(--text-secondary)' }}>Net Average</span>
-              <span>0</span>
+              <span style={{ fontWeight: 'bold' }}>{netAverage.toLocaleString()}</span>
             </div>
             <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.5rem 0' }}>
               <span style={{ color: 'var(--text-secondary)' }}>Goal</span>
-              <span style={{ color: '#3b82f6' }}>1,850</span>
+              <span style={{ color: '#3b82f6', fontWeight: 'bold' }}>{dailyGoal.toLocaleString()}</span>
             </div>
           </div>
         </div>

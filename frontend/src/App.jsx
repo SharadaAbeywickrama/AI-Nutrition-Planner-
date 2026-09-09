@@ -108,7 +108,7 @@ function App() {
 
         {activeTab === 'today' && <DiaryView profile={profile} onNavigate={setActiveTab} />}
         
-        {activeTab === 'progress' && <InsightsDashboard />}
+        {activeTab === 'progress' && <InsightsDashboard profile={profile} />}
         
         {activeTab === 'more' && <UserProfile />}
 
