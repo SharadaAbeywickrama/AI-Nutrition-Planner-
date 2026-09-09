@@ -6,6 +6,8 @@ import UserProfile from './components/UserProfile';
 import InsightsDashboard from './components/InsightsDashboard';
 import OnboardingWizard from './components/OnboardingWizard';
 import DiaryView from './components/DiaryView';
+import MeasurementsView from './components/MeasurementsView';
+import SleepView from './components/SleepView';
 
 function App() {
   const [activeTab, setActiveTab] = useState('today');
@@ -94,7 +96,7 @@ function App() {
           </div>
         )}
 
-        {activeTab === 'today' && <DiaryView profile={profile} />}
+        {activeTab === 'today' && <DiaryView profile={profile} onNavigate={setActiveTab} />}
         
         {activeTab === 'progress' && <InsightsDashboard />}
         
@@ -107,6 +109,10 @@ function App() {
         {activeTab === 'analyze_result' && analysisResult && (
           <AnalysisResult result={analysisResult} onReset={() => setActiveTab('today')} />
         )}
+
+        {activeTab === 'measurements' && <MeasurementsView profile={profile} onBack={() => setActiveTab('today')} />}
+        
+        {activeTab === 'sleep' && <SleepView onBack={() => setActiveTab('today')} />}
       </main>
 
       {/* BOTTOM NAVIGATION BAR */}

@@ -163,6 +163,39 @@ const InsightsDashboard = () => {
               </div>
             </div>
           ))}
+
+          {/* Premium "Foods Highest In" Sections */}
+          <div style={{ marginTop: '2rem' }}>
+            {['Carbohydrates', 'Fat', 'Protein'].map((macro) => (
+              <div key={`highest-${macro}`} className="glass-panel" style={{ padding: '1.5rem', borderRadius: '16px', marginBottom: '1rem' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+                  <h3 style={{ fontSize: '1.1rem', margin: 0 }}>Foods Highest in {macro}</h3>
+                  <span style={{ color: '#fbbf24' }}>👑</span>
+                </div>
+                
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.75rem', paddingBottom: '0.75rem', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+                  <span>Rice Bowl (example)</span>
+                  <span style={{ color: 'var(--text-secondary)' }}>43 g</span>
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1.5rem' }}>
+                  <span>Tomato Soup (example)</span>
+                  <span style={{ color: 'var(--text-secondary)' }}>30 g</span>
+                </div>
+
+                <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', marginBottom: '1rem', lineHeight: '1.4' }}>
+                  Go Premium to see which of the foods you've logged rank highest in {macro}
+                </p>
+
+                <button style={{ 
+                  width: '100%', padding: '1rem', background: '#3b82f6', color: 'white', 
+                  border: 'none', borderRadius: '24px', fontWeight: 'bold', 
+                  display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '0.5rem' 
+                }}>
+                  <span style={{ color: '#fbbf24' }}>👑</span> Analyze My Foods
+                </button>
+              </div>
+            ))}
+          </div>
         </div>
       )}
 
