@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, ChevronLeft, ChevronRight, ChevronDown, Info, BookOpen } from 'lucide-react';
 
 const SleepView = ({ onBack }) => {
   return (
@@ -11,55 +11,92 @@ const SleepView = ({ onBack }) => {
         <h2 style={{ fontSize: '1.5rem', margin: 0 }}>Sleep</h2>
       </div>
 
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', flex: 1 }}>
-        <div style={{ background: '#3b82f6', color: 'white', padding: '0.25rem 0.5rem', borderRadius: '4px', fontSize: '0.8rem', fontWeight: 'bold', marginBottom: '1.5rem' }}>
-          NEW
+      {/* Date Selector */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0 1rem', marginBottom: '2rem' }}>
+        <ChevronLeft size={20} color="var(--text-secondary)" cursor="pointer" />
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontWeight: 'bold' }}>
+          Yesterday <ChevronDown size={16} />
         </div>
-        
-        <h1 style={{ fontSize: '2.5rem', lineHeight: 1.2, marginBottom: '1rem' }}>
-          See how food<br/>affects your sleep
-        </h1>
-        
-        <p style={{ color: 'var(--text-secondary)', fontSize: '1.1rem', lineHeight: 1.5, marginBottom: '3rem', maxWidth: '300px' }}>
-          Sleep and food insights together! Spot trends, adjust your routine, and rest well.
-        </p>
+        <ChevronRight size={20} color="var(--text-secondary)" cursor="pointer" />
+      </div>
 
-        {/* Mock Graphic */}
-        <div className="glass-panel" style={{ width: '100%', maxWidth: '350px', padding: '2rem', borderRadius: '24px', marginBottom: 'auto' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '2rem', marginBottom: '2rem' }}>
-            <div style={{ width: '120px', height: '120px', borderRadius: '50%', border: '8px solid #4f46e5', borderTopColor: '#ef4444', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column' }}>
-              <span style={{ fontSize: '2rem', color: 'white' }}>🌙</span>
-              <span style={{ fontWeight: 'bold' }}>Sleep</span>
-            </div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', flex: 1 }}>
-              <div style={{ height: '8px', background: 'rgba(255,255,255,0.1)', borderRadius: '4px', display: 'flex' }}><div style={{ width: '60%', background: '#ef4444', borderRadius: '4px' }}></div></div>
-              <div style={{ height: '8px', background: 'rgba(255,255,255,0.1)', borderRadius: '4px', display: 'flex' }}><div style={{ width: '80%', background: '#8b5cf6', borderRadius: '4px' }}></div></div>
-              <div style={{ height: '8px', background: 'rgba(255,255,255,0.1)', borderRadius: '4px', display: 'flex' }}><div style={{ width: '40%', background: '#3b82f6', borderRadius: '4px' }}></div></div>
-              <div style={{ height: '8px', background: 'rgba(255,255,255,0.1)', borderRadius: '4px', display: 'flex' }}><div style={{ width: '70%', background: '#10b981', borderRadius: '4px' }}></div></div>
+      {/* Sleep Chart Area */}
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '2rem', marginBottom: '3rem' }}>
+        {/* Circle */}
+        <div style={{ 
+          width: '180px', height: '180px', borderRadius: '50%', 
+          border: '12px solid rgba(255,255,255,0.05)', 
+          display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'
+        }}>
+          <span style={{ fontSize: '1.5rem', color: '#8b5cf6', marginBottom: '0.25rem' }}>🌙</span>
+          <span style={{ fontSize: '2rem', fontWeight: 'bold' }}>0h 0min</span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', color: 'var(--text-secondary)', fontSize: '0.9rem' }}>
+            Total Sleep <Info size={14} />
+          </div>
+        </div>
+
+        {/* Legend */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+          <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem' }}>
+            <div style={{ width: '4px', height: '16px', background: '#ef4444', borderRadius: '2px', marginTop: '4px' }}></div>
+            <div>
+              <div style={{ fontSize: '0.9rem', color: 'var(--text-secondary)' }}>Awake</div>
+              <div style={{ fontWeight: 'bold' }}>N/A</div>
             </div>
           </div>
-          
-          <div style={{ background: 'rgba(0,0,0,0.2)', padding: '1rem', borderRadius: '12px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
+          <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem' }}>
+            <div style={{ width: '4px', height: '16px', background: '#8b5cf6', borderRadius: '2px', marginTop: '4px' }}></div>
             <div>
-              <div style={{ fontWeight: 'bold', marginBottom: '0.5rem' }}>Foods Logged</div>
-              <div style={{ width: '100px', height: '8px', background: 'rgba(255,255,255,0.1)', borderRadius: '4px', marginBottom: '0.25rem' }}></div>
-              <div style={{ width: '150px', height: '8px', background: 'rgba(255,255,255,0.1)', borderRadius: '4px' }}></div>
+              <div style={{ fontSize: '0.9rem', color: 'var(--text-secondary)' }}>REM</div>
+              <div style={{ fontWeight: 'bold' }}>N/A</div>
             </div>
-            <div style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>20:30</div>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem' }}>
+            <div style={{ width: '4px', height: '16px', background: '#3b82f6', borderRadius: '2px', marginTop: '4px' }}></div>
+            <div>
+              <div style={{ fontSize: '0.9rem', color: 'var(--text-secondary)' }}>Light</div>
+              <div style={{ fontWeight: 'bold' }}>N/A</div>
+            </div>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem' }}>
+            <div style={{ width: '4px', height: '16px', background: '#1e3a8a', borderRadius: '2px', marginTop: '4px' }}></div>
+            <div>
+              <div style={{ fontSize: '0.9rem', color: 'var(--text-secondary)' }}>Deep</div>
+              <div style={{ fontWeight: 'bold' }}>N/A</div>
+            </div>
           </div>
         </div>
       </div>
 
-      <button style={{ 
-        width: '100%', padding: '1rem', background: '#3b82f6', color: 'white', 
-        border: 'none', borderRadius: '24px', fontWeight: 'bold', fontSize: '1.1rem',
-        marginTop: '2rem'
+      {/* Premium Banner */}
+      <div style={{ 
+        background: 'linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%)', 
+        borderRadius: '12px', padding: '1.5rem', marginBottom: '2rem', position: 'relative', overflow: 'hidden'
       }}>
-        Set Up Health Connect
-      </button>
-      <p style={{ textAlign: 'center', color: 'var(--text-secondary)', fontSize: '0.9rem', marginTop: '1rem' }}>
-        Tap to sync your sleep data from Health Connect
-      </p>
+        <h3 style={{ fontSize: '1.25rem', marginBottom: '0.5rem' }}>Psst...you awake?</h3>
+        <p style={{ fontSize: '0.95rem', lineHeight: 1.5, opacity: 0.9, marginBottom: '1.5rem', maxWidth: '90%' }}>
+          Unlock Premium to see what's keeping you up, from your workouts to late-night snacks.
+        </p>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <span style={{ fontWeight: 'bold', color: 'rgba(255,255,255,0.7)' }}>Preview Premium Sleep</span>
+          <span style={{ color: '#fbbf24', fontSize: '1.2rem' }}>👑</span>
+        </div>
+      </div>
+
+      {/* Log Meals Section */}
+      <div style={{ textAlign: 'center', padding: '2rem 1rem' }}>
+        <BookOpen size={32} color="var(--text-secondary)" style={{ marginBottom: '1rem' }} />
+        <h3 style={{ fontSize: '1.1rem', marginBottom: '1rem' }}>Log meals for more insights</h3>
+        <p style={{ color: 'var(--text-secondary)', lineHeight: 1.5, marginBottom: '2rem' }}>
+          You'll see your daily diary here — and better understand how your food choices impact sleep levels.
+        </p>
+        <button style={{ 
+          background: 'transparent', color: '#3b82f6', border: '1px solid #3b82f6', 
+          borderRadius: '24px', padding: '0.75rem 2rem', fontWeight: 'bold', fontSize: '1rem'
+        }}>
+          Add Food
+        </button>
+      </div>
 
     </div>
   );
