@@ -1,13 +1,14 @@
 import os
 import json
-from groq import Groq
+from openai import OpenAI
 from dotenv import load_dotenv
 
 load_dotenv()
 
-# We expect GROQ_API_KEY to be set in the environment or .env
-client = Groq(
-    api_key=os.getenv("GROQ_API_KEY"),
+# We expect OPENROUTER_API_KEY to be set in the environment or .env
+client = OpenAI(
+    base_url="https://openrouter.ai/api/v1",
+    api_key=os.getenv("OPENROUTER_API_KEY"),
 )
 
 def analyze_diet(diet_text: str, days_logged: int, aggregated_nutrients: dict, moods: list, profile: dict = None) -> dict:
@@ -67,7 +68,7 @@ def analyze_diet(diet_text: str, days_logged: int, aggregated_nutrients: dict, m
                     "content": prompt,
                 }
             ],
-            model="llama-3.3-70b-versatile",
+            model="meta-llama/llama-3.3-70b-instruct",
             response_format={"type": "json_object"},
             temperature=0.2,
         )
