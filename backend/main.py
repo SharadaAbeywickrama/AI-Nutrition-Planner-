@@ -2,8 +2,9 @@ from fastapi import FastAPI, Depends, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 from typing import List
+from pydantic import BaseModel
 
-import models, schemas, database, ai_service
+import models, schemas, database, ai_service, rag_service
 from database import engine
 
 # Create database tables
@@ -19,6 +20,19 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+class RagQueryRequest(BaseModel):
+    query: str
+
+@app.post("/api/rag_chat")
+def rag_chat(request: RagQueryRequest, db: Session = Depends(database.get_db)):
+    try:
+        profile = db.query(models.UserProfile).first()
+        response = rag_service.generate_rag_response(request.query, profile)
+        return {"response": response}
+    except Exception as e:
+        print(f"RAG Error: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
 
 # ---- Profile Endpoints ----
 

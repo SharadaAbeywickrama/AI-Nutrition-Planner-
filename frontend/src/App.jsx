@@ -8,6 +8,7 @@ import OnboardingWizard from './components/OnboardingWizard';
 import DiaryView from './components/DiaryView';
 import MeasurementsView from './components/MeasurementsView';
 import SleepView from './components/SleepView';
+import AIChatBubble from './components/AIChatBubble';
 
 function App() {
   const [activeTab, setActiveTab] = useState('today');
@@ -151,6 +152,7 @@ function App() {
         </button>
       </div>
 
+      <AIChatBubble />
     </div>
   );
 }
