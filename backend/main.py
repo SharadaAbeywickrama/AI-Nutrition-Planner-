@@ -102,10 +102,27 @@ def analyze_user_diet(diet: schemas.DietInput, db: Session = Depends(database.ge
         if log.mood_trigger and log.mood_trigger not in moods_logged:
             moods_logged.append(log.mood_trigger)
         for item in log.foods:
-            # Find food in DB
-            db_food = next((f for f in FOOD_DATABASE if f["id"] == item.food_id), None)
+            # Find food in DB — support both int and string IDs
+            db_food = next((f for f in FOOD_DATABASE if str(f["id"]) == str(item.food_id)), None)
             if db_food:
-                for nutrient, amount in db_food["nutrients"].items():
+                # Support new flat schema (protein_g, fat_g, carbohydrates_g...)
+                # and also legacy nested schema (nutrients: {})
+                if "nutrients" in db_food:
+                    nutrient_map = db_food["nutrients"]
+                else:
+                    nutrient_map = {
+                        "Calories": db_food.get("calories", 0),
+                        "Protein": db_food.get("protein_g", 0),
+                        "Fat": db_food.get("fat_g", 0),
+                        "Carbs": db_food.get("carbohydrates_g", 0),
+                        "Fiber": db_food.get("fiber_g", 0),
+                        "Sugar": db_food.get("sugar_g", 0),
+                        "Sodium": db_food.get("sodium_mg", 0),
+                        "Iron": db_food.get("iron_mg", 0),
+                        "Calcium": db_food.get("calcium_mg", 0),
+                        "Vitamin B12": db_food.get("vitamin_b12_mcg", 0),
+                    }
+                for nutrient, amount in nutrient_map.items():
                     aggregated_nutrients[nutrient] = aggregated_nutrients.get(nutrient, 0) + (amount * item.quantity_multiplier)
 
     # 2. Convert structured input back to a string for DB storage

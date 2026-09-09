@@ -42,7 +42,8 @@ const StructuredMealLog = ({ onAnalyze, isLoading }) => {
 
   const addFoodToDay = (dayIndex, foodId) => {
     if (!foodId) return;
-    const food = foodsDb.find(f => f.id === foodId);
+    // IDs from <select> are always strings; compare with string cast
+    const food = foodsDb.find(f => String(f.id) === String(foodId));
     if (!food) return;
 
     const newLogs = [...dailyLogs];
@@ -160,9 +161,17 @@ const StructuredMealLog = ({ onAnalyze, isLoading }) => {
                   defaultValue=""
                 >
                   <option value="" disabled>+ Add Food</option>
-                  {foodsDb.map(f => (
-                    <option key={f.id} value={f.id}>{f.name}</option>
-                  ))}
+                  {['Breakfast', 'Curries', 'Short Eats', 'Rice', 'Rice & Mixed', 'Sweets'].map(cat => {
+                    const items = foodsDb.filter(f => f.category === cat);
+                    if (items.length === 0) return null;
+                    return (
+                      <optgroup key={cat} label={`── ${cat} ──`}>
+                        {items.map(f => (
+                          <option key={f.id} value={f.id}>{f.name} ({f.calories} kcal)</option>
+                        ))}
+                      </optgroup>
+                    );
+                  })}
                 </select>
               </div>
             </div>
