@@ -4,6 +4,17 @@ import { ArrowLeft, Share2, Camera, Calendar, TrendingUp } from 'lucide-react';
 const MeasurementsView = ({ profile, onBack }) => {
   const [activeTab, setActiveTab] = useState('Weight'); // 'Steps' or 'Weight'
 
+  const currentWeight = profile?.weight_kg ? Math.round(profile.weight_kg * 2.20462) : 150;
+  
+  // Generate last 6 days for the chart
+  const dates = Array.from({ length: 6 }).map((_, i) => {
+    const d = new Date();
+    d.setDate(d.getDate() - (5 - i));
+    return d.toLocaleDateString('en-US', { month: '2-digit', day: '2-digit' });
+  });
+
+  const todayStr = new Date().toLocaleDateString('en-US', { weekday: 'long', day: 'numeric', month: 'short', year: 'numeric' });
+
   return (
     <div className="animate-fade-in" style={{ paddingBottom: '100px' }}>
       
@@ -47,9 +58,9 @@ const MeasurementsView = ({ profile, onBack }) => {
         <div className="animate-fade-in">
           {/* Chart Area */}
           <div style={{ height: '250px', position: 'relative', marginBottom: '2rem' }}>
-            <div style={{ position: 'absolute', top: 0, left: 0, color: 'var(--text-secondary)', fontSize: '0.75rem' }}>151</div>
-            <div style={{ position: 'absolute', top: '50%', left: 0, transform: 'translateY(-50%)', color: 'var(--text-secondary)', fontSize: '0.75rem' }}>150</div>
-            <div style={{ position: 'absolute', bottom: '20px', left: 0, color: 'var(--text-secondary)', fontSize: '0.75rem' }}>149</div>
+            <div style={{ position: 'absolute', top: 0, left: 0, color: 'var(--text-secondary)', fontSize: '0.75rem' }}>{currentWeight + 1}</div>
+            <div style={{ position: 'absolute', top: '50%', left: 0, transform: 'translateY(-50%)', color: 'var(--text-secondary)', fontSize: '0.75rem' }}>{currentWeight}</div>
+            <div style={{ position: 'absolute', bottom: '20px', left: 0, color: 'var(--text-secondary)', fontSize: '0.75rem' }}>{currentWeight - 1}</div>
             
             {/* Grid lines */}
             <div style={{ width: '100%', borderBottom: '1px solid rgba(255,255,255,0.05)', position: 'absolute', top: '0', left: '20px' }}></div>
@@ -61,7 +72,7 @@ const MeasurementsView = ({ profile, onBack }) => {
 
             {/* X Axis */}
             <div style={{ display: 'flex', justifyContent: 'space-between', position: 'absolute', bottom: 0, left: '20px', right: 0 }}>
-              {['02/09', '04/09', '06/09', '08/09', '10/09', '12/09'].map(d => (
+              {dates.map(d => (
                 <span key={d} style={{ color: 'var(--text-secondary)', fontSize: '0.7rem' }}>{d}</span>
               ))}
             </div>
@@ -74,8 +85,8 @@ const MeasurementsView = ({ profile, onBack }) => {
 
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1rem 0', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
             <div>
-              <div style={{ fontSize: '1.1rem', marginBottom: '0.25rem' }}>Tuesday, 08 Sept 2026</div>
-              <div style={{ color: 'var(--text-secondary)' }}>{profile?.weight_kg ? Math.round(profile.weight_kg * 2.20462) : 150} lbs</div>
+              <div style={{ fontSize: '1.1rem', marginBottom: '0.25rem' }}>{todayStr}</div>
+              <div style={{ color: 'var(--text-secondary)' }}>{currentWeight} lbs</div>
             </div>
             <Camera size={24} color="var(--text-secondary)" />
           </div>
