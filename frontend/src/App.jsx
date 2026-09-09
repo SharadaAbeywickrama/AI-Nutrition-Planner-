@@ -122,7 +122,7 @@ function App() {
 
         {activeTab === 'measurements' && <MeasurementsView profile={profile} onBack={() => setActiveTab('today')} />}
         
-        {activeTab === 'sleep' && <SleepView onBack={() => setActiveTab('today')} />}
+        {activeTab === 'sleep' && <SleepView onBack={() => setActiveTab('today')} onNavigateLog={() => setActiveTab('log')} />}
       </main>
 
       {/* BOTTOM NAVIGATION BAR */}

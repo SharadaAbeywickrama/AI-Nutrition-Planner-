@@ -1,7 +1,7 @@
 import React from 'react';
 import { ArrowLeft, ChevronLeft, ChevronRight, ChevronDown, Info, BookOpen } from 'lucide-react';
 
-const SleepView = ({ onBack }) => {
+const SleepView = ({ onBack, onNavigateLog }) => {
   return (
     <div className="animate-fade-in" style={{ paddingBottom: '100px', display: 'flex', flexDirection: 'column', height: '100%' }}>
       
@@ -68,18 +68,23 @@ const SleepView = ({ onBack }) => {
         </div>
       </div>
 
-      {/* Premium Banner */}
-      <div style={{ 
-        background: 'linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%)', 
-        borderRadius: '12px', padding: '1.5rem', marginBottom: '2rem', position: 'relative', overflow: 'hidden'
-      }}>
-        <h3 style={{ fontSize: '1.25rem', marginBottom: '0.5rem' }}>Psst...you awake?</h3>
-        <p style={{ fontSize: '0.95rem', lineHeight: 1.5, opacity: 0.9, marginBottom: '1.5rem', maxWidth: '90%' }}>
-          Unlock Premium to see what's keeping you up, from your workouts to late-night snacks.
-        </p>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <span style={{ fontWeight: 'bold', color: 'rgba(255,255,255,0.7)' }}>Preview Premium Sleep</span>
-          <span style={{ color: '#fbbf24', fontSize: '1.2rem' }}>👑</span>
+      {/* AI Sleep Insights */}
+      <div className="glass-panel" style={{ padding: '1.5rem', marginBottom: '2rem', borderRadius: '12px' }}>
+        <h3 style={{ fontSize: '1.25rem', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          <span>✨</span> AI Sleep & Diet Insights
+        </h3>
+        
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+          <div style={{ padding: '1rem', background: 'rgba(16, 185, 129, 0.1)', borderLeft: '4px solid #10b981', borderRadius: '8px' }}>
+            <p style={{ margin: 0, fontSize: '0.95rem', color: 'var(--text-primary)' }}>
+              <strong style={{ color: '#10b981' }}>Positive Trend:</strong> When you eat high-protein dinners, your Deep Sleep increases by an average of 45 minutes.
+            </p>
+          </div>
+          <div style={{ padding: '1rem', background: 'rgba(239, 68, 68, 0.1)', borderLeft: '4px solid #ef4444', borderRadius: '8px' }}>
+            <p style={{ margin: 0, fontSize: '0.95rem', color: 'var(--text-primary)' }}>
+              <strong style={{ color: '#ef4444' }}>Watch out:</strong> Late-night snacks with high sugar content are correlating with a 20% drop in your REM sleep. Try a handful of nuts instead!
+            </p>
+          </div>
         </div>
       </div>
 
@@ -90,10 +95,12 @@ const SleepView = ({ onBack }) => {
         <p style={{ color: 'var(--text-secondary)', lineHeight: 1.5, marginBottom: '2rem' }}>
           You'll see your daily diary here — and better understand how your food choices impact sleep levels.
         </p>
-        <button style={{ 
-          background: 'transparent', color: '#3b82f6', border: '1px solid #3b82f6', 
-          borderRadius: '24px', padding: '0.75rem 2rem', fontWeight: 'bold', fontSize: '1rem'
-        }}>
+        <button 
+          onClick={onNavigateLog}
+          style={{ 
+            background: 'transparent', color: '#3b82f6', border: '1px solid #3b82f6', 
+            borderRadius: '24px', padding: '0.75rem 2rem', fontWeight: 'bold', fontSize: '1rem', cursor: 'pointer'
+          }}>
           Add Food
         </button>
       </div>
