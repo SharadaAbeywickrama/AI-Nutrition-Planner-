@@ -67,18 +67,18 @@ const DiaryView = ({ profile, onNavigate = () => {} }) => {
 
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
         <h3 style={{ fontSize: '1.25rem' }}>Diary</h3>
-        <span style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>View all</span>
+        <span style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', cursor: 'pointer' }} onClick={() => onNavigate('log')}>View all</span>
       </div>
 
       {['Breakfast', 'Lunch', 'Dinner', 'Snacks'].map(meal => (
-        <div key={meal} className="glass-panel" style={{ padding: '1.25rem', marginBottom: '0.75rem', borderRadius: '12px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <div key={meal} className="glass-panel" style={{ padding: '1.25rem', marginBottom: '0.75rem', borderRadius: '12px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer' }} onClick={() => onNavigate('log')}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
             <div style={{ width: '24px', height: '24px', opacity: 0.5 }}>🍽️</div>
             <span style={{ fontSize: '1.1rem', fontWeight: '500' }}>{meal}</span>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
             <span style={{ color: 'var(--text-secondary)', letterSpacing: '2px' }}>•••</span>
-            <button style={{ background: 'rgba(59, 130, 246, 0.2)', color: '#3b82f6', border: 'none', padding: '0.5rem 1rem', borderRadius: '20px', fontWeight: 'bold', cursor: 'pointer' }}>Log</button>
+            <button style={{ background: 'rgba(59, 130, 246, 0.2)', color: '#3b82f6', border: 'none', padding: '0.5rem 1rem', borderRadius: '20px', fontWeight: 'bold', cursor: 'pointer' }} onClick={(e) => { e.stopPropagation(); onNavigate('log'); }}>Log</button>
           </div>
         </div>
       ))}
@@ -120,7 +120,14 @@ const DiaryView = ({ profile, onNavigate = () => {} }) => {
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
         <h3 style={{ fontSize: '1.25rem' }}>Notes</h3>
       </div>
-      <div className="glass-panel" style={{ padding: '1.25rem', borderRadius: '12px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+      <div 
+        className="glass-panel" 
+        style={{ padding: '1.25rem', borderRadius: '12px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem', cursor: 'pointer' }}
+        onClick={() => {
+          const note = prompt("Enter your note for today:");
+          if (note) alert("Note saved! (This is a demo feature)");
+        }}
+      >
         <div style={{ color: 'var(--text-secondary)' }}>Add a note</div>
         <div style={{ color: 'var(--text-secondary)' }}>✏️</div>
       </div>
