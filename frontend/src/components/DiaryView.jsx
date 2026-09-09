@@ -72,6 +72,51 @@ const DiaryView = ({ profile }) => {
           </div>
         </div>
       ))}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem', marginTop: '1.5rem' }}>
+        <h3 style={{ fontSize: '1.25rem' }}>Healthy habits</h3>
+      </div>
+      <div className="glass-panel" style={{ borderRadius: '12px', overflow: 'hidden', marginBottom: '1.5rem' }}>
+        <div style={{ padding: '1.25rem', borderBottom: '1px solid rgba(255,255,255,0.05)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div>
+            <div style={{ fontSize: '1.1rem', fontWeight: '500', marginBottom: '0.25rem' }}>Water</div>
+            <div style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>0 cups (You must be thirsty!)</div>
+          </div>
+          <div style={{ color: 'var(--text-secondary)' }}>&gt;</div>
+        </div>
+        <div style={{ padding: '1.25rem', borderBottom: '1px solid rgba(255,255,255,0.05)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div>
+            <div style={{ fontSize: '1.1rem', fontWeight: '500', marginBottom: '0.25rem' }}>Exercise</div>
+            <div style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>Track exercise to see calorie burn</div>
+          </div>
+          <div style={{ color: 'var(--text-secondary)' }}>&gt;</div>
+        </div>
+        <div style={{ padding: '1.25rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div>
+            <div style={{ fontSize: '1.1rem', fontWeight: '500', marginBottom: '0.25rem' }}>Steps</div>
+            <div style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>Connect a device</div>
+          </div>
+          <div style={{ color: 'var(--text-secondary)' }}>&gt;</div>
+        </div>
+      </div>
+
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+        <h3 style={{ fontSize: '1.25rem' }}>Weight</h3>
+      </div>
+      <div className="glass-panel" style={{ padding: '1.25rem', borderRadius: '12px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+        <div>
+          <div style={{ fontSize: '1.1rem', fontWeight: '500', marginBottom: '0.25rem' }}>{profile?.weight_kg ? Math.round(profile.weight_kg * 2.20462) : 150} lbs</div>
+          <div style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>Logged today</div>
+        </div>
+        <div style={{ color: 'var(--text-secondary)' }}>&gt;</div>
+      </div>
+
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+        <h3 style={{ fontSize: '1.25rem' }}>Notes</h3>
+      </div>
+      <div className="glass-panel" style={{ padding: '1.25rem', borderRadius: '12px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+        <div style={{ color: 'var(--text-secondary)' }}>Add a note</div>
+        <div style={{ color: 'var(--text-secondary)' }}>✏️</div>
+      </div>
     </div>
   );
 };
