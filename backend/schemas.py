@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from typing import List, Optional
+from typing import List, Optional, Any
 from datetime import datetime
 
 class UserProfileBase(BaseModel):
@@ -29,6 +29,8 @@ class DailyLog(BaseModel):
     day: str
     mood_trigger: Optional[str] = None
     foods: List[LoggedFoodItem]
+    base_goal: Optional[int] = 1500
+    exercise_cals: Optional[int] = 0
 
 class DietInput(BaseModel):
     days_logged: int = 7
@@ -48,7 +50,7 @@ class AnalysisRecordResponse(BaseModel):
     id: int
     diet_input: str
     days_logged: int
-    analysis_result: AnalysisResponse
+    analysis_result: Any   # flexible: handles both dict and nested model
     created_at: datetime
 
     class Config:
