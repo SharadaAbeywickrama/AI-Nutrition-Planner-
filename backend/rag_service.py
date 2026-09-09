@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy import text
 from sentence_transformers import SentenceTransformer
 from openai import OpenAI
-from models import engine
+from database import engine
 from dotenv import load_dotenv
 
 load_dotenv()
