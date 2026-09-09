@@ -76,16 +76,6 @@ function App() {
           <h1 style={{ fontSize: '1.5rem', margin: 0 }}>Today</h1>
           <ChevronDown size={20} color="var(--text-secondary)" />
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-          <button style={{ 
-            background: '#fbbf24', color: '#78350f', border: 'none', 
-            padding: '0.4rem 0.75rem', borderRadius: '20px', 
-            fontWeight: 'bold', fontSize: '0.85rem' 
-          }}>Go Premium</button>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', fontWeight: 'bold' }}>
-            <span>0</span> <span style={{ color: '#fbbf24' }}>⚡</span>
-          </div>
-        </div>
       </header>
 
       {/* MAIN CONTENT AREA */}
