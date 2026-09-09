@@ -1,14 +1,28 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import StructuredMealLog from './components/StructuredMealLog';
 import AnalysisResult from './components/AnalysisResult';
 import UserProfile from './components/UserProfile';
 import InsightsDashboard from './components/InsightsDashboard';
+import OnboardingWizard from './components/OnboardingWizard';
 
 function App() {
   const [activeTab, setActiveTab] = useState('analyze');
   const [isLoading, setIsLoading] = useState(false);
   const [analysisResult, setAnalysisResult] = useState(null);
   const [error, setError] = useState(null);
+  const [showOnboarding, setShowOnboarding] = useState(false);
+
+  useEffect(() => {
+    const hasCompleted = localStorage.getItem('hasCompletedOnboarding');
+    if (!hasCompleted) {
+      setShowOnboarding(true);
+    }
+  }, []);
+
+  const handleOnboardingComplete = () => {
+    localStorage.setItem('hasCompletedOnboarding', 'true');
+    setShowOnboarding(false);
+  };
 
   const handleAnalyze = async (dailyLogs, daysLogged) => {
     setIsLoading(true);
@@ -43,6 +57,7 @@ function App() {
 
   return (
     <div className="container">
+      {showOnboarding && <OnboardingWizard onComplete={handleOnboardingComplete} />}
       <header className="header animate-fade-in" style={{ paddingBottom: '2rem' }}>
         <h1 className="text-gradient">AI Nutrition Planner</h1>
         <p style={{ fontSize: '1.2rem', maxWidth: '600px', margin: '0 auto', marginBottom: '2rem' }}>
