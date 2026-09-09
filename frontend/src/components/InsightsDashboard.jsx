@@ -5,10 +5,15 @@ const InsightsDashboard = ({ profile }) => {
 
   const dailyGoal = profile?.goal_weight_kg ? 1850 : 2000;
   const weeklyGoal = dailyGoal * 7;
-  // Without global log state, we assume 0 consumed for now. 
-  // In a real app, this would sum up the last 7 days of logs.
   const netAverage = 0; 
   const underWeeklyGoal = weeklyGoal - (netAverage * 7);
+
+  // Dynamic Macro Targets (50% Carbs, 30% Fat, 20% Protein)
+  const proteinGoal = Math.round((dailyGoal * 0.20) / 4);
+  const carbsGoal = Math.round((dailyGoal * 0.50) / 4);
+  const fatGoal = Math.round((dailyGoal * 0.30) / 9);
+  const currentWeightLbs = profile?.weight_kg ? Math.round(profile.weight_kg * 2.20462) : 150;
+  const startWeightLbs = currentWeightLbs + 5; // Mock starting weight for demonstration
 
   const SubNav = () => (
     <div style={{ display: 'flex', gap: '1.5rem', borderBottom: '1px solid rgba(255,255,255,0.05)', marginBottom: '1.5rem', overflowX: 'auto', paddingBottom: '0.5rem' }}>
@@ -67,29 +72,29 @@ const InsightsDashboard = ({ profile }) => {
             <div style={{ display: 'flex', gap: '2rem' }}>
               <div style={{ flex: 1 }}>
                 <div style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', marginBottom: '0.25rem' }}>Start</div>
-                <div style={{ fontWeight: 'bold', marginBottom: '1rem' }}>150 lbs</div>
+                <div style={{ fontWeight: 'bold', marginBottom: '1rem' }}>{startWeightLbs} lbs</div>
                 
-                <div style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', marginBottom: '0.25rem' }}>Current (08/09)</div>
-                <div style={{ fontWeight: 'bold', marginBottom: '1rem' }}>150 lbs</div>
+                <div style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', marginBottom: '0.25rem' }}>Current (Today)</div>
+                <div style={{ fontWeight: 'bold', marginBottom: '1rem' }}>{currentWeightLbs} lbs</div>
                 
                 <div style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', marginBottom: '0.25rem' }}>Change</div>
-                <div style={{ fontWeight: 'bold' }}>0 lbs</div>
+                <div style={{ fontWeight: 'bold' }}>{currentWeightLbs - startWeightLbs} lbs</div>
               </div>
               <div style={{ flex: 2, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
                 <div style={{ borderTop: '1px solid rgba(255,255,255,0.1)', position: 'relative', height: '30px' }}>
-                  <span style={{ position: 'absolute', top: '-10px', left: 0, fontSize: '0.75rem', color: 'var(--text-secondary)' }}>160</span>
+                  <span style={{ position: 'absolute', top: '-10px', left: 0, fontSize: '0.75rem', color: 'var(--text-secondary)' }}>{startWeightLbs + 5}</span>
                 </div>
                 <div style={{ borderTop: '1px solid rgba(255,255,255,0.1)', position: 'relative', height: '30px' }}>
-                  <span style={{ position: 'absolute', top: '-10px', left: 0, fontSize: '0.75rem', color: 'var(--text-secondary)' }}>155</span>
+                  <span style={{ position: 'absolute', top: '-10px', left: 0, fontSize: '0.75rem', color: 'var(--text-secondary)' }}>{startWeightLbs}</span>
                 </div>
                 <div style={{ borderTop: '1px solid rgba(255,255,255,0.1)', position: 'relative', height: '30px', display: 'flex', alignItems: 'flex-start', justifyContent: 'center' }}>
-                  <span style={{ position: 'absolute', top: '-10px', left: 0, fontSize: '0.75rem', color: 'var(--text-secondary)' }}>150</span>
+                  <span style={{ position: 'absolute', top: '-10px', left: 0, fontSize: '0.75rem', color: 'var(--text-secondary)' }}>{currentWeightLbs}</span>
                   <div style={{ width: '12px', height: '12px', border: '3px solid var(--success)', borderRadius: '50%', background: 'var(--bg-dark)', marginTop: '-6px' }} />
                 </div>
                 <div style={{ borderTop: '1px solid rgba(255,255,255,0.1)', position: 'relative', height: '30px' }}>
-                  <span style={{ position: 'absolute', top: '-10px', left: 0, fontSize: '0.75rem', color: 'var(--text-secondary)' }}>145</span>
+                  <span style={{ position: 'absolute', top: '-10px', left: 0, fontSize: '0.75rem', color: 'var(--text-secondary)' }}>{currentWeightLbs - 5}</span>
                 </div>
-                <div style={{ textAlign: 'center', color: 'var(--text-secondary)', fontSize: '0.75rem' }}>08/09</div>
+                <div style={{ textAlign: 'center', color: 'var(--text-secondary)', fontSize: '0.75rem' }}>Today</div>
               </div>
             </div>
           </div>
@@ -135,11 +140,11 @@ const InsightsDashboard = ({ profile }) => {
           </div>
 
           {[
-            { name: 'Protein', goal: '93 g', left: '93 g' },
-            { name: 'Carbohydrates', goal: '231 g', left: '231 g' },
-            { name: 'Fiber', goal: '38 g', left: '38 g' },
-            { name: 'Sugar', goal: '69 g', left: '69 g' },
-            { name: 'Fat', goal: '62 g', left: '62 g' }
+            { name: 'Protein', goal: `${proteinGoal} g`, left: `${proteinGoal} g` },
+            { name: 'Carbohydrates', goal: `${carbsGoal} g`, left: `${carbsGoal} g` },
+            { name: 'Fiber', goal: '30 g', left: '30 g' },
+            { name: 'Sugar', goal: '<50 g', left: '50 g' },
+            { name: 'Fat', goal: `${fatGoal} g`, left: `${fatGoal} g` }
           ].map((nut, i) => (
             <div key={i} style={{ display: 'flex', borderBottom: '1px solid rgba(255,255,255,0.05)', padding: '1rem 0' }}>
               <div style={{ flex: 1, fontWeight: '500' }}>{nut.name}</div>
