@@ -9,6 +9,11 @@ const DiaryView = ({ profile, onNavigate = () => {} }) => {
   const days = ['S','M','T','W','T','F','S'];
   const todayIdx = today.getDay();
 
+  const dailyGoal = profile?.goal_weight_kg ? 1850 : 2000;
+  const proteinGoal = Math.round((dailyGoal * 0.20) / 4);
+  const carbsGoal = Math.round((dailyGoal * 0.50) / 4);
+  const fatGoal = Math.round((dailyGoal * 0.30) / 9);
+
   return (
     <div className="animate-fade-in" style={{ paddingBottom: '100px' }}>
       
@@ -35,10 +40,10 @@ const DiaryView = ({ profile, onNavigate = () => {} }) => {
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '1rem' }}>
           <div>
             <span style={{ fontSize: '2rem', fontWeight: 'bold' }}>0</span> <span style={{ color: 'var(--text-secondary)' }}>cal</span>
-            <span style={{ color: 'var(--text-secondary)', marginLeft: '0.5rem', fontSize: '0.9rem' }}>/ {profile?.goal_weight_kg ? 1850 : 2000}</span>
+            <span style={{ color: 'var(--text-secondary)', marginLeft: '0.5rem', fontSize: '0.9rem' }}>/ {dailyGoal}</span>
           </div>
           <div style={{ textAlign: 'right' }}>
-            <span style={{ fontSize: '1.2rem', fontWeight: 'bold' }}>{profile?.goal_weight_kg ? 1850 : 2000}</span> <span style={{ color: 'var(--text-secondary)' }}>left</span>
+            <span style={{ fontSize: '1.2rem', fontWeight: 'bold' }}>{dailyGoal}</span> <span style={{ color: 'var(--text-secondary)' }}>left</span>
           </div>
         </div>
         <div style={{ height: '8px', background: 'rgba(255,255,255,0.1)', borderRadius: '4px', overflow: 'hidden' }}>
@@ -50,17 +55,17 @@ const DiaryView = ({ profile, onNavigate = () => {} }) => {
       <div className="glass-panel" style={{ padding: '1.5rem', marginBottom: '1.5rem', borderRadius: '16px', display: 'flex', justifyContent: 'space-between' }}>
         <div style={{ flex: 1, paddingRight: '1rem' }}>
           <p style={{ color: 'var(--text-secondary)', marginBottom: '0.5rem', fontSize: '0.9rem' }}>Carbs</p>
-          <p style={{ fontWeight: 'bold', marginBottom: '0.5rem' }}>0 g <span style={{ fontWeight: 'normal', color: 'var(--text-secondary)', fontSize: '0.8rem' }}>/ 231</span></p>
+          <p style={{ fontWeight: 'bold', marginBottom: '0.5rem' }}>0 g <span style={{ fontWeight: 'normal', color: 'var(--text-secondary)', fontSize: '0.8rem' }}>/ {carbsGoal}</span></p>
           <div style={{ height: '6px', background: 'rgba(255,255,255,0.1)', borderRadius: '3px' }}><div style={{ height: '100%', width: '0%', background: '#3b82f6' }}/></div>
         </div>
         <div style={{ flex: 1, padding: '0 0.5rem' }}>
           <p style={{ color: 'var(--text-secondary)', marginBottom: '0.5rem', fontSize: '0.9rem' }}>Fat</p>
-          <p style={{ fontWeight: 'bold', marginBottom: '0.5rem' }}>0 g <span style={{ fontWeight: 'normal', color: 'var(--text-secondary)', fontSize: '0.8rem' }}>/ 62</span></p>
+          <p style={{ fontWeight: 'bold', marginBottom: '0.5rem' }}>0 g <span style={{ fontWeight: 'normal', color: 'var(--text-secondary)', fontSize: '0.8rem' }}>/ {fatGoal}</span></p>
           <div style={{ height: '6px', background: 'rgba(255,255,255,0.1)', borderRadius: '3px' }}><div style={{ height: '100%', width: '0%', background: '#8b5cf6' }}/></div>
         </div>
         <div style={{ flex: 1, paddingLeft: '1rem' }}>
           <p style={{ color: 'var(--text-secondary)', marginBottom: '0.5rem', fontSize: '0.9rem' }}>Protein</p>
-          <p style={{ fontWeight: 'bold', marginBottom: '0.5rem' }}>0 g <span style={{ fontWeight: 'normal', color: 'var(--text-secondary)', fontSize: '0.8rem' }}>/ 93</span></p>
+          <p style={{ fontWeight: 'bold', marginBottom: '0.5rem' }}>0 g <span style={{ fontWeight: 'normal', color: 'var(--text-secondary)', fontSize: '0.8rem' }}>/ {proteinGoal}</span></p>
           <div style={{ height: '6px', background: 'rgba(255,255,255,0.1)', borderRadius: '3px' }}><div style={{ height: '100%', width: '0%', background: '#10b981' }}/></div>
         </div>
       </div>
