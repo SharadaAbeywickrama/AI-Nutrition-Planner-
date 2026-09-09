@@ -88,15 +88,56 @@ const UserProfile = () => {
             <option value="Very Active">Very Active</option>
           </select>
         </div>
-        <div className="input-container">
-          <label className="input-label">Primary Goal</label>
-          <select name="dietary_goal" value={profile.dietary_goal || ''} onChange={handleChange} className="premium-input" style={{ minHeight: 'auto', padding: '0.75rem' }}>
-            <option value="">Select...</option>
-            <option value="General Health">General Health</option>
-            <option value="Weight Loss">Weight Loss</option>
-            <option value="Muscle Gain">Muscle Gain</option>
-            <option value="Deficiency Management">Deficiency Management</option>
-          </select>
+        <div className="input-container" style={{ gridColumn: '1 / -1' }}>
+          <label className="input-label">Your Goals (Select up to 3)</label>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.75rem', marginTop: '0.5rem' }}>
+            {[
+              "Lose weight",
+              "Maintain weight",
+              "Gain weight",
+              "Gain muscle",
+              "Modify my diet",
+              "Manage stress",
+              "Increase step count"
+            ].map(goal => {
+              const selectedGoals = profile.dietary_goal ? profile.dietary_goal.split(', ') : [];
+              const isSelected = selectedGoals.includes(goal);
+              
+              const toggleGoal = () => {
+                let newGoals;
+                if (isSelected) {
+                  newGoals = selectedGoals.filter(g => g !== goal);
+                } else {
+                  if (selectedGoals.length < 3) {
+                    newGoals = [...selectedGoals, goal];
+                  } else {
+                    newGoals = selectedGoals;
+                  }
+                }
+                setProfile(prev => ({ ...prev, dietary_goal: newGoals.join(', ') }));
+              };
+
+              return (
+                <button
+                  key={goal}
+                  type="button"
+                  onClick={toggleGoal}
+                  style={{
+                    padding: '0.75rem 1.25rem',
+                    background: isSelected ? 'rgba(16, 185, 129, 0.15)' : 'transparent',
+                    border: isSelected ? '1px solid var(--success)' : '1px solid var(--glass-border)',
+                    color: 'var(--text-primary)',
+                    borderRadius: '8px',
+                    fontSize: '0.9rem',
+                    cursor: 'pointer',
+                    transition: 'all 0.2s'
+                  }}
+                >
+                  {goal}
+                </button>
+              );
+            })}
+          </div>
         </div>
 
         <div style={{ gridColumn: '1 / -1', marginTop: '1rem' }}>
