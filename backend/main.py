@@ -1,9 +1,12 @@
+import os
 import traceback
 from fastapi import FastAPI, Depends, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 from typing import List
 from pydantic import BaseModel
+from fastapi.exceptions import RequestValidationError
+from fastapi.responses import JSONResponse
 
 import models, schemas, database, ai_service, rag_service
 from database import engine
@@ -13,14 +16,29 @@ models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="AI Nutrition Planner API")
 
-# Allow CORS for local development
+# Allow CORS configured via env var
+ALLOWED_ORIGINS = os.getenv("ALLOWED_ORIGINS", "http://localhost:5173,http://localhost:3000").split(",")
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"], # In production, restrict to frontend domain
+    allow_origins=ALLOWED_ORIGINS,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
+@app.exception_handler(RequestValidationError)
+async def validation_exception_handler(request, exc):
+    errors = exc.errors()
+    detail = []
+    for e in errors:
+        detail.append({"field": " -> ".join(str(x) for x in e['loc']), "message": e['msg']})
+    print(f"VALIDATION ERROR on {request.url}: {detail}")
+    return JSONResponse(status_code=422, content={"detail": detail, "hint": "Check field types and required fields"})
+
+@app.get("/api/health")
+def health_check():
+    return {"status": "ok", "message": "AI Nutrition Planner API is running"}
 
 class RagQueryRequest(BaseModel):
     query: str
@@ -73,6 +91,18 @@ with open(FOOD_DB_PATH, "r") as f:
 @app.get("/api/foods")
 def get_foods():
     return FOOD_DATABASE
+
+@app.get("/api/foods/search")
+def search_foods(q: str = ""):
+    if not q:
+        return FOOD_DATABASE
+    q_lower = q.lower()
+    return [f for f in FOOD_DATABASE if q_lower in f['name'].lower() or q_lower in f.get('category','').lower()]
+
+@app.get("/api/foods/categories")
+def get_categories():
+    cats = list(dict.fromkeys(f.get('category', 'Other') for f in FOOD_DATABASE))
+    return {"categories": cats}
 
 # ---- Analysis Endpoints ----
 
