@@ -45,11 +45,19 @@ const OnboardingWizard = ({ onComplete }) => {
   const [currentWeight, setCurrentWeight] = useState('');
   const [goalWeight, setGoalWeight] = useState('');
 
+  // Added State for Steps 8 and 9
+  const [usernameInput, setUsernameInput] = useState('');
+  const [calculatedCals, setCalculatedCals] = useState(2000);
+  const [projectedDate, setProjectedDate] = useState('');
+
   useEffect(() => {
     fetch('http://localhost:8000/api/profile')
       .then(res => res.json())
       .then(data => {
-        if (data && data.name) setUserName(data.name);
+        if (data && data.name && data.name !== 'User') {
+          setUserName(data.name);
+          setUsernameInput(data.name);
+        }
       })
       .catch(err => console.error("Could not fetch profile", err));
   }, []);
@@ -62,6 +70,58 @@ const OnboardingWizard = ({ onComplete }) => {
         setArray([...array, item]);
       }
     }
+  };
+
+  const handleCalculatePlan = () => {
+    // Basic BMR calculation (Mifflin-St Jeor)
+    let age = 30; // default
+    if (dob) {
+      const diffMs = Date.now() - new Date(dob).getTime();
+      age = Math.abs(new Date(diffMs).getUTCFullYear() - 1970);
+    }
+    
+    let heightCm = 170; // default
+    if (heightFt && heightIn) heightCm = (parseInt(heightFt) * 30.48) + (parseInt(heightIn) * 2.54);
+    
+    let weightKg = 70; // default
+    if (currentWeight) weightKg = parseFloat(currentWeight) * 0.453592;
+
+    let bmr = (10 * weightKg) + (6.25 * heightCm) - (5 * age);
+    bmr = sex === 'Female' ? bmr - 161 : bmr + 5;
+
+    // Activity Multiplier
+    const multipliers = {
+      "Not Very Active": 1.2,
+      "Lightly Active": 1.375,
+      "Active": 1.55,
+      "Very Active": 1.725
+    };
+    let tdee = bmr * (multipliers[activityLevel] || 1.2);
+
+    // Goal Adjustment
+    let targetCals = tdee;
+    let lbsToLose = 0;
+    if (currentWeight && goalWeight) {
+      const diff = parseFloat(currentWeight) - parseFloat(goalWeight);
+      if (diff > 0) {
+        targetCals -= 500; // 1 lb per week deficit
+        lbsToLose = diff;
+      } else if (diff < 0) {
+        targetCals += 500; // 1 lb per week surplus
+      }
+    }
+
+    setCalculatedCals(Math.round(targetCals));
+
+    // Calculate projected date (assuming 1 lb per week change)
+    if (lbsToLose > 0) {
+      const weeks = lbsToLose; // 1 lb/week
+      const date = new Date();
+      date.setDate(date.getDate() + (weeks * 7));
+      setProjectedDate(date.toLocaleDateString('en-US', { month: 'long', day: 'numeric' }));
+    }
+
+    setStep(9);
   };
 
   const handleFinish = async () => {
@@ -90,6 +150,7 @@ const OnboardingWizard = ({ onComplete }) => {
       let currentProfile = {};
       if (res.ok) currentProfile = await res.json();
 
+      currentProfile.name = usernameInput || 'User';
       currentProfile.dietary_goal = selectedGoals.join(', ');
       currentProfile.barriers = selectedBarriers.join(', ');
       currentProfile.activity_level = activityLevel;
@@ -288,10 +349,68 @@ const OnboardingWizard = ({ onComplete }) => {
             <button 
               className="btn-primary" 
               style={{ width: '100%', padding: '1rem', justifyContent: 'center', marginTop: 'auto' }} 
-              disabled={!heightFt || !heightIn || !currentWeight || !goalWeight || isSaving} 
+              disabled={!heightFt || !heightIn || !currentWeight || !goalWeight} 
+              onClick={() => setStep(8)}
+            >
+              NEXT
+            </button>
+          </div>
+        )}
+
+        {/* STEP 8: Username */}
+        {step === 8 && (
+          <div className="animate-fade-in" style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+            <h2 style={{ fontSize: '1.75rem', marginBottom: '1.5rem' }}>Create a username.</h2>
+            
+            <div className="input-container" style={{ marginBottom: '2rem' }}>
+              <label className="input-label" style={{ fontWeight: 'bold' }}>Create a username</label>
+              <input 
+                type="text" 
+                className="premium-input" 
+                placeholder="jayashanwannigama"
+                value={usernameInput} 
+                onChange={(e) => setUsernameInput(e.target.value)} 
+              />
+            </div>
+            
+            <button 
+              className="btn-primary" 
+              style={{ width: '100%', padding: '1rem', justifyContent: 'center', marginTop: 'auto' }} 
+              disabled={!usernameInput} 
+              onClick={handleCalculatePlan}
+            >
+              FINISH
+            </button>
+          </div>
+        )}
+
+        {/* STEP 9: Congratulations */}
+        {step === 9 && (
+          <div className="animate-fade-in" style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}>
+            <h2 style={{ fontSize: '2rem', color: 'var(--accent-primary)', marginBottom: '2rem' }}>Congratulations!</h2>
+            
+            <div style={{ background: 'white', color: 'black', padding: '2.5rem 2rem', borderRadius: '12px', width: '100%', marginBottom: '2rem' }}>
+              <p style={{ fontSize: '1.1rem', marginBottom: '1rem', fontWeight: '500' }}>Your daily net calorie goal is:</p>
+              <div style={{ fontSize: '4rem', fontWeight: 'bold', lineHeight: '1', marginBottom: '0.5rem' }}>{calculatedCals}</div>
+              <p style={{ color: '#2563eb', fontWeight: 'bold', marginBottom: '2rem' }}>calories</p>
+
+              {projectedDate && currentWeight && goalWeight && (
+                <>
+                  <p style={{ color: '#666', fontSize: '0.9rem', marginBottom: '0.5rem' }}>With this plan, you should:</p>
+                  <p style={{ fontSize: '1.1rem' }}>
+                    <strong>Lose {Math.abs(parseFloat(currentWeight) - parseFloat(goalWeight))} lbs</strong> by <strong>{projectedDate}</strong>
+                  </p>
+                </>
+              )}
+            </div>
+
+            <button 
+              className="btn-primary" 
+              style={{ width: '100%', padding: '1rem', justifyContent: 'center', marginTop: 'auto' }} 
+              disabled={isSaving} 
               onClick={handleFinish}
             >
-              {isSaving ? 'Saving Profile...' : 'NEXT'}
+              {isSaving ? 'SAVING PROFILE...' : 'EXPLORE NUTRITION PLANNER'}
             </button>
           </div>
         )}
