@@ -1,23 +1,32 @@
 import React, { useState } from 'react';
 import { ChevronDown, Plus } from 'lucide-react';
+import WaterTracker from './WaterTracker';
+import MacroRing from './MacroRing';
 
-const DiaryView = ({ profile }) => {
+const DiaryView = ({ profile, onNavigate = () => {} }) => {
+  const today = new Date();
+  const days = ['S','M','T','W','T','F','S'];
+  const todayIdx = today.getDay();
+
   return (
     <div className="animate-fade-in" style={{ paddingBottom: '100px' }}>
       
       {/* Date Row */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1.5rem', color: 'var(--text-secondary)' }}>
-        {['M', 'T', 'W', 'T', 'F', 'S', 'S'].map((day, i) => (
+      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem', color: 'var(--text-secondary)' }}>
+        {days.map((day, i) => (
           <div key={i} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem' }}>
-            <span style={{ fontSize: '0.8rem', color: i === 1 ? 'var(--text-primary)' : 'var(--text-secondary)' }}>{day}</span>
+            <span style={{ fontSize: '0.8rem', color: i === todayIdx ? 'var(--text-primary)' : 'var(--text-secondary)', fontWeight: i === todayIdx ? '700' : '400' }}>{day}</span>
             <div style={{ 
               width: '12px', height: '12px', borderRadius: '50%', 
-              border: i === 1 ? '2px dashed var(--text-primary)' : '2px solid var(--glass-border)',
-              background: 'transparent'
+              border: i === todayIdx ? '2px dashed var(--accent-primary)' : '2px solid var(--glass-border)',
+              background: i === todayIdx ? 'rgba(59,130,246,0.2)' : 'transparent'
             }} />
           </div>
         ))}
       </div>
+      <p style={{ textAlign: 'center', color: 'var(--text-secondary)', fontSize: '0.8rem', marginBottom: '1.5rem' }}>
+        {today.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}
+      </p>
 
       {/* Calories Card */}
       <div className="glass-panel" style={{ padding: '1.5rem', marginBottom: '1rem', borderRadius: '16px' }}>
@@ -75,14 +84,9 @@ const DiaryView = ({ profile }) => {
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem', marginTop: '1.5rem' }}>
         <h3 style={{ fontSize: '1.25rem' }}>Healthy habits</h3>
       </div>
+      <WaterTracker />
+
       <div className="glass-panel" style={{ borderRadius: '12px', overflow: 'hidden', marginBottom: '1.5rem' }}>
-        <div style={{ padding: '1.25rem', borderBottom: '1px solid rgba(255,255,255,0.05)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer' }}>
-          <div>
-            <div style={{ fontSize: '1.1rem', fontWeight: '500', marginBottom: '0.25rem' }}>Water</div>
-            <div style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>0 cups (You must be thirsty!)</div>
-          </div>
-          <div style={{ color: 'var(--text-secondary)' }}>&gt;</div>
-        </div>
         <div style={{ padding: '1.25rem', borderBottom: '1px solid rgba(255,255,255,0.05)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer' }} onClick={() => onNavigate('sleep')}>
           <div>
             <div style={{ fontSize: '1.1rem', fontWeight: '500', marginBottom: '0.25rem', display: 'flex', gap: '0.5rem', alignItems: 'center' }}>Sleep <span style={{ background: '#3b82f6', color: 'white', padding: '0.1rem 0.4rem', borderRadius: '4px', fontSize: '0.6rem' }}>NEW</span></div>
