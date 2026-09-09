@@ -44,16 +44,35 @@ function App() {
     setIsLoading(true);
     setError(null);
     try {
+      // Sanitize: ensure food_id is always a string and only send fields the backend expects
+      const cleanedLogs = dailyLogs.map(log => ({
+        day: log.day,
+        mood_trigger: log.mood_trigger || null,
+        base_goal: log.base_goal || 1500,
+        exercise_cals: log.exercise_cals || 0,
+        foods: log.foods.map(f => ({
+          food_id: String(f.food_id),
+          name: f.name,
+          quantity_multiplier: parseFloat(f.quantity_multiplier) || 1.0
+        }))
+      }));
+
+      const payload = { daily_logs: cleanedLogs, days_logged: daysLogged };
+      console.log('Sending to /api/analyze:', JSON.stringify(payload));
+
       const response = await fetch('http://localhost:8000/api/analyze', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ daily_logs: dailyLogs, days_logged: daysLogged }),
+        body: JSON.stringify(payload),
       });
 
-      if (!response.ok) throw new Error('Failed to analyze diet.');
+      if (!response.ok) {
+        const errBody = await response.json().catch(() => ({}));
+        throw new Error(errBody.detail || `Server error ${response.status}`);
+      }
       const data = await response.json();
       setAnalysisResult(data);
-      setActiveTab('analyze_result'); // move to result view
+      setActiveTab('analyze_result');
     } catch (err) {
       console.error(err);
       setError(err.message);
