@@ -11,9 +11,12 @@ class UserProfile(Base):
     age = Column(Integer, nullable=True)
     sex = Column(String, nullable=True)
     weight_kg = Column(Float, nullable=True)
+    goal_weight_kg = Column(Float, nullable=True)
     height_cm = Column(Float, nullable=True)
     activity_level = Column(String, nullable=True)
     dietary_goal = Column(String, nullable=True)
+    barriers = Column(String, nullable=True)
+    country = Column(String, nullable=True)
 
 class AnalysisRecord(Base):
     __tablename__ = "analysis_records"

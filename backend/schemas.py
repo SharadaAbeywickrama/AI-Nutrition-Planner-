@@ -7,9 +7,12 @@ class UserProfileBase(BaseModel):
     age: Optional[int] = None
     sex: Optional[str] = None
     weight_kg: Optional[float] = None
+    goal_weight_kg: Optional[float] = None
     height_cm: Optional[float] = None
     activity_level: Optional[str] = None
     dietary_goal: Optional[str] = None
+    barriers: Optional[str] = None
+    country: Optional[str] = None
 
 class UserProfileResponse(UserProfileBase):
     id: int

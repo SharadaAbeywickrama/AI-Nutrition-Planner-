@@ -75,16 +75,32 @@ const UserProfile = () => {
           <input type="number" name="weight_kg" value={profile.weight_kg || ''} onChange={handleChange} className="premium-input" style={{ minHeight: 'auto', padding: '0.75rem' }} />
         </div>
         <div className="input-container">
+          <label className="input-label">Goal Weight (kg)</label>
+          <input type="number" name="goal_weight_kg" value={profile.goal_weight_kg || ''} onChange={handleChange} className="premium-input" style={{ minHeight: 'auto', padding: '0.75rem' }} />
+        </div>
+        <div className="input-container">
           <label className="input-label">Height (cm)</label>
           <input type="number" name="height_cm" value={profile.height_cm || ''} onChange={handleChange} className="premium-input" style={{ minHeight: 'auto', padding: '0.75rem' }} />
+        </div>
+        <div className="input-container">
+          <label className="input-label">Country</label>
+          <select name="country" value={profile.country || ''} onChange={handleChange} className="premium-input" style={{ minHeight: 'auto', padding: '0.75rem' }}>
+            <option value="">Select...</option>
+            <option value="United States">United States</option>
+            <option value="Sri Lanka">Sri Lanka</option>
+            <option value="United Kingdom">United Kingdom</option>
+            <option value="Australia">Australia</option>
+            <option value="Canada">Canada</option>
+            <option value="Other">Other</option>
+          </select>
         </div>
         <div className="input-container">
           <label className="input-label">Activity Level</label>
           <select name="activity_level" value={profile.activity_level || ''} onChange={handleChange} className="premium-input" style={{ minHeight: 'auto', padding: '0.75rem' }}>
             <option value="">Select...</option>
-            <option value="Sedentary">Sedentary</option>
+            <option value="Not Very Active">Not Very Active</option>
             <option value="Lightly Active">Lightly Active</option>
-            <option value="Moderately Active">Moderately Active</option>
+            <option value="Active">Active</option>
             <option value="Very Active">Very Active</option>
           </select>
         </div>
@@ -134,6 +150,54 @@ const UserProfile = () => {
                   }}
                 >
                   {goal}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        <div className="input-container" style={{ gridColumn: '1 / -1' }}>
+          <label className="input-label">Past Barriers</label>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.75rem', marginTop: '0.5rem' }}>
+            {[
+              "Lack of time",
+              "The regimen was too hard to follow",
+              "Did not enjoy the food",
+              "Difficult to make food choices",
+              "Social eating and events",
+              "Food cravings",
+              "Lack of progress"
+            ].map(barrier => {
+              const selectedBarriers = profile.barriers && typeof profile.barriers === 'string' ? profile.barriers.split(', ') : [];
+              const isSelected = selectedBarriers.includes(barrier);
+              
+              const toggleBarrier = () => {
+                let newBarriers;
+                if (isSelected) {
+                  newBarriers = selectedBarriers.filter(b => b !== barrier);
+                } else {
+                  newBarriers = [...selectedBarriers, barrier];
+                }
+                setProfile(prev => ({ ...prev, barriers: newBarriers.join(', ') }));
+              };
+
+              return (
+                <button
+                  key={barrier}
+                  type="button"
+                  onClick={toggleBarrier}
+                  style={{
+                    padding: '0.75rem 1.25rem',
+                    background: isSelected ? 'rgba(16, 185, 129, 0.15)' : 'transparent',
+                    border: isSelected ? '1px solid var(--success)' : '1px solid var(--glass-border)',
+                    color: 'var(--text-primary)',
+                    borderRadius: '8px',
+                    fontSize: '0.9rem',
+                    cursor: 'pointer',
+                    transition: 'all 0.2s'
+                  }}
+                >
+                  {barrier}
                 </button>
               );
             })}

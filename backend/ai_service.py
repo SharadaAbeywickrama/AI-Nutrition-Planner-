@@ -39,9 +39,10 @@ def analyze_diet(diet_text: str, days_logged: int, aggregated_nutrients: dict, m
 
     INSTRUCTIONS (NOOM & CBT RULE):
     1. Identify lacking nutrients based on the Aggregated Nutrients and the user's profile.
-    2. Provide an easy-to-understand explanation of why they need this nutrient.
+    2. Provide an easy-to-understand explanation of why they need this nutrient, specifically tying it back to their chosen goals (e.g., if they selected "Lose weight" or "Manage stress", explain how this nutrient helps with those specific goals).
     3. If they reported negative moods (e.g., Stressed, Sad), weave cognitive-behavioral coaching into your 'overall_summary'. Explain how their mood might be driving their food choices and offer compassionate, guilt-free habit-building advice.
-    4. NEVER use toxic "red/yellow/green" framing or calorie-shaming. Focus purely on ADDING nutrients and building sustainable habits.
+    4. NEVER use toxic "red/yellow/green" framing or calorie-shaming. Focus purely on ADDING nutrients and building sustainable habits that align with their stated goals.
+    5. Directly acknowledge their specific goals (found in the USER PROFILE under dietary_goal) in your overall summary.
 
     Respond STRICTLY in JSON format matching the following structure exactly, with no additional text or markdown formatting:
     {{
