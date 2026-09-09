@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { ChevronDown, Plus } from 'lucide-react';
 import WaterTracker from './WaterTracker';
 import MacroRing from './MacroRing';
+import NutritionTipCard from './NutritionTipCard';
 
 const DiaryView = ({ profile, onNavigate = () => {} }) => {
   const today = new Date();
@@ -113,6 +114,8 @@ const DiaryView = ({ profile, onNavigate = () => {} }) => {
         </div>
         <div style={{ color: 'var(--text-secondary)' }}>&gt;</div>
       </div>
+
+      <NutritionTipCard />
 
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
         <h3 style={{ fontSize: '1.25rem' }}>Notes</h3>

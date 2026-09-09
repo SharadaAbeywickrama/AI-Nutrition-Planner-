@@ -38,6 +38,21 @@ const AnalysisResult = ({ result, onReset }) => {
         </span>
       </div>
 
+      {result.analysis_result?.aggregated_nutrients && (
+        <div className="glass-panel" style={{ padding: '1.5rem', marginBottom: '1.5rem', borderRadius: '16px' }}>
+          <h4 style={{ margin: '0 0 1rem 0', color: 'var(--text-secondary)', fontSize: '0.9rem', textTransform: 'uppercase', letterSpacing: '1px' }}>Week Totals</h4>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1rem', textAlign: 'center' }}>
+            {[['🔥','Calories','Calories','kcal'],['💪','Protein','Protein','g'],['🥑','Fat','Fat','g'],['🌾','Carbs','Carbs','g']].map(([icon,label,key,unit]) => (
+              <div key={key}>
+                <div style={{ fontSize: '1.5rem', marginBottom: '0.25rem' }}>{icon}</div>
+                <div style={{ fontSize: '1.2rem', fontWeight: 'bold' }}>{Math.round(result.analysis_result.aggregated_nutrients?.[key] || 0)}</div>
+                <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>{unit} {label}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
       <div className="glass-panel" style={{ padding: '2.5rem', marginBottom: '2rem', borderTop: '4px solid var(--accent-primary)' }}>
         <h2 style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.5rem' }}>
           <HeartPulse className="text-gradient" size={32} />
@@ -99,12 +114,16 @@ const AnalysisResult = ({ result, onReset }) => {
         </div>
       )}
 
-      <div style={{ marginTop: '3rem', textAlign: 'center' }}>
+      <div style={{ marginTop: '3rem', textAlign: 'center', display: 'flex', gap: '1rem', justifyContent: 'center' }}>
         <button onClick={onReset} className="btn-primary" style={{ background: 'rgba(255,255,255,0.05)', color: 'var(--text-primary)', border: '1px solid var(--glass-border)' }}>
           <RefreshCw size={18} />
           Analyze Another Week
         </button>
+        <button onClick={() => { navigator.clipboard.writeText(result.analysis_result?.overall_summary || ''); alert('Summary copied!'); }} className="btn-primary" style={{ background: 'rgba(59,130,246,0.15)', color: '#3b82f6', border: '1px solid #3b82f6' }}>
+          📋 Copy Summary
+        </button>
       </div>
+
 
       <div style={{ marginTop: '2rem', padding: '1rem', background: 'rgba(245, 158, 11, 0.1)', border: '1px solid var(--warning)', borderRadius: '8px', textAlign: 'center' }}>
         <p style={{ color: 'var(--warning)', fontSize: '0.85rem' }}>
