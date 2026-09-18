@@ -320,13 +320,13 @@ const OnboardingWizard = ({ onComplete }) => {
             <div style={{ display: 'flex', gap: '1rem', marginBottom: '1.5rem' }}>
               <div style={{ flex: 1 }}>
                 <div style={{ display: 'flex', alignItems: 'center', background: 'rgba(255,255,255,0.05)', borderRadius: '8px', border: '1px solid var(--glass-border)' }}>
-                  <input type="number" placeholder="5" value={heightFt} onChange={(e) => setHeightFt(e.target.value)} style={{ flex: 1, background: 'transparent', border: 'none', color: 'white', padding: '0.75rem', outline: 'none' }} />
+                  <input type="number" value={heightFt} onChange={(e) => setHeightFt(e.target.value)} style={{ flex: 1, background: 'transparent', border: 'none', color: 'white', padding: '0.75rem', outline: 'none' }} />
                   <span style={{ paddingRight: '0.75rem', color: 'var(--text-secondary)' }}>ft</span>
                 </div>
               </div>
               <div style={{ flex: 1 }}>
                 <div style={{ display: 'flex', alignItems: 'center', background: 'rgba(255,255,255,0.05)', borderRadius: '8px', border: '1px solid var(--glass-border)' }}>
-                  <input type="number" placeholder="10" value={heightIn} onChange={(e) => setHeightIn(e.target.value)} style={{ flex: 1, background: 'transparent', border: 'none', color: 'white', padding: '0.75rem', outline: 'none' }} />
+                  <input type="number" value={heightIn} onChange={(e) => setHeightIn(e.target.value)} style={{ flex: 1, background: 'transparent', border: 'none', color: 'white', padding: '0.75rem', outline: 'none' }} />
                   <span style={{ paddingRight: '0.75rem', color: 'var(--text-secondary)' }}>in</span>
                 </div>
               </div>
@@ -335,14 +335,14 @@ const OnboardingWizard = ({ onComplete }) => {
             <h2 style={{ fontSize: '1.25rem', marginBottom: '0.25rem' }}>How much do you weigh?</h2>
             <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', marginBottom: '0.5rem' }}>It's OK to estimate. You can update this later.</p>
             <div style={{ display: 'flex', alignItems: 'center', background: 'rgba(255,255,255,0.05)', borderRadius: '8px', border: '1px solid var(--glass-border)', marginBottom: '1.5rem', width: '50%' }}>
-              <input type="number" placeholder="150" value={currentWeight} onChange={(e) => setCurrentWeight(e.target.value)} style={{ flex: 1, background: 'transparent', border: 'none', color: 'white', padding: '0.75rem', outline: 'none' }} />
+              <input type="number" value={currentWeight} onChange={(e) => setCurrentWeight(e.target.value)} style={{ flex: 1, background: 'transparent', border: 'none', color: 'white', padding: '0.75rem', outline: 'none' }} />
               <span style={{ paddingRight: '0.75rem', color: 'var(--text-secondary)' }}>lbs</span>
             </div>
 
             <h2 style={{ fontSize: '1.25rem', marginBottom: '0.25rem' }}>What's your goal weight?</h2>
             <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', marginBottom: '0.5rem' }}>Don't worry. This doesn't affect your daily calorie goal.</p>
             <div style={{ display: 'flex', alignItems: 'center', background: 'rgba(255,255,255,0.05)', borderRadius: '8px', border: '1px solid var(--glass-border)', marginBottom: '1rem', width: '50%' }}>
-              <input type="number" placeholder="140" value={goalWeight} onChange={(e) => setGoalWeight(e.target.value)} style={{ flex: 1, background: 'transparent', border: 'none', color: 'white', padding: '0.75rem', outline: 'none' }} />
+              <input type="number" value={goalWeight} onChange={(e) => setGoalWeight(e.target.value)} style={{ flex: 1, background: 'transparent', border: 'none', color: 'white', padding: '0.75rem', outline: 'none' }} />
               <span style={{ paddingRight: '0.75rem', color: 'var(--text-secondary)' }}>lbs</span>
             </div>
 
@@ -367,7 +367,6 @@ const OnboardingWizard = ({ onComplete }) => {
               <input 
                 type="text" 
                 className="premium-input" 
-                placeholder="jayashanwannigama"
                 value={usernameInput} 
                 onChange={(e) => setUsernameInput(e.target.value)} 
               />
