@@ -26,10 +26,13 @@ const SleepView = ({ onBack, onNavigateLog }) => {
         <div style={{ 
           width: '180px', height: '180px', borderRadius: '50%', 
           border: '12px solid rgba(255,255,255,0.05)', 
+          borderTopColor: '#8b5cf6',
+          borderRightColor: '#3b82f6',
+          borderBottomColor: '#1e3a8a',
           display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'
         }}>
           <span style={{ fontSize: '1.5rem', color: '#8b5cf6', marginBottom: '0.25rem' }}>🌙</span>
-          <span style={{ fontSize: '2rem', fontWeight: 'bold' }}>0h 0min</span>
+          <span style={{ fontSize: '2rem', fontWeight: 'bold' }}>7h 15m</span>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', color: 'var(--text-secondary)', fontSize: '0.9rem' }}>
             Total Sleep <Info size={14} />
           </div>
@@ -41,28 +44,28 @@ const SleepView = ({ onBack, onNavigateLog }) => {
             <div style={{ width: '4px', height: '16px', background: '#ef4444', borderRadius: '2px', marginTop: '4px' }}></div>
             <div>
               <div style={{ fontSize: '0.9rem', color: 'var(--text-secondary)' }}>Awake</div>
-              <div style={{ fontWeight: 'bold' }}>N/A</div>
+              <div style={{ fontWeight: 'bold' }}>45m</div>
             </div>
           </div>
           <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem' }}>
             <div style={{ width: '4px', height: '16px', background: '#8b5cf6', borderRadius: '2px', marginTop: '4px' }}></div>
             <div>
               <div style={{ fontSize: '0.9rem', color: 'var(--text-secondary)' }}>REM</div>
-              <div style={{ fontWeight: 'bold' }}>N/A</div>
+              <div style={{ fontWeight: 'bold' }}>1h 30m</div>
             </div>
           </div>
           <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem' }}>
             <div style={{ width: '4px', height: '16px', background: '#3b82f6', borderRadius: '2px', marginTop: '4px' }}></div>
             <div>
               <div style={{ fontSize: '0.9rem', color: 'var(--text-secondary)' }}>Light</div>
-              <div style={{ fontWeight: 'bold' }}>N/A</div>
+              <div style={{ fontWeight: 'bold' }}>3h 15m</div>
             </div>
           </div>
           <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem' }}>
             <div style={{ width: '4px', height: '16px', background: '#1e3a8a', borderRadius: '2px', marginTop: '4px' }}></div>
             <div>
               <div style={{ fontSize: '0.9rem', color: 'var(--text-secondary)' }}>Deep</div>
-              <div style={{ fontWeight: 'bold' }}>N/A</div>
+              <div style={{ fontWeight: 'bold' }}>1h 45m</div>
             </div>
           </div>
         </div>

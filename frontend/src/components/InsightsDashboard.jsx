@@ -5,7 +5,7 @@ const InsightsDashboard = ({ profile }) => {
 
   const dailyGoal = profile?.goal_weight_kg ? 1850 : 2000;
   const weeklyGoal = dailyGoal * 7;
-  const netAverage = 0; 
+  const netAverage = dailyGoal - 85; 
   const underWeeklyGoal = weeklyGoal - (netAverage * 7);
 
   // Dynamic Macro Targets (50% Carbs, 30% Fat, 20% Protein)
@@ -52,14 +52,17 @@ const InsightsDashboard = ({ profile }) => {
               <span style={{ color: 'var(--text-secondary)' }}>&gt;</span>
             </div>
             <div style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', marginBottom: '0.5rem' }}>7-day avg</div>
-            <div style={{ fontSize: '1.5rem', fontWeight: 'bold', marginBottom: '1rem' }}>0 cal</div>
+            <div style={{ fontSize: '1.5rem', fontWeight: 'bold', marginBottom: '1rem' }}>{(dailyGoal - 85).toLocaleString()} cal</div>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', height: '100px', gap: '0.5rem' }}>
-              {['W', 'T', 'F', 'S', 'S', 'M', 'T'].map((day, i) => (
-                <div key={i} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem' }}>
-                  <div style={{ width: '100%', flex: 1, background: 'rgba(255,255,255,0.05)', borderRadius: '4px' }} />
-                  <span style={{ color: 'var(--text-secondary)', fontSize: '0.75rem' }}>{day}</span>
-                </div>
-              ))}
+              {['W', 'T', 'F', 'S', 'S', 'M', 'T'].map((day, i) => {
+                const heightPercent = 60 + (i * 5) + (i % 2 === 0 ? 10 : -10);
+                return (
+                  <div key={i} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem' }}>
+                    <div style={{ width: '100%', height: `${heightPercent}%`, background: '#3b82f6', borderRadius: '4px' }} />
+                    <span style={{ color: 'var(--text-secondary)', fontSize: '0.75rem' }}>{day}</span>
+                  </div>
+                );
+              })}
             </div>
           </div>
 
@@ -140,16 +143,16 @@ const InsightsDashboard = ({ profile }) => {
           </div>
 
           {[
-            { name: 'Protein', goal: `${proteinGoal} g`, left: `${proteinGoal} g` },
-            { name: 'Carbohydrates', goal: `${carbsGoal} g`, left: `${carbsGoal} g` },
-            { name: 'Fiber', goal: '30 g', left: '30 g' },
-            { name: 'Sugar', goal: '<50 g', left: '50 g' },
-            { name: 'Fat', goal: `${fatGoal} g`, left: `${fatGoal} g` }
+            { name: 'Protein', avg: `${proteinGoal - 5} g`, goal: `${proteinGoal} g`, left: '5 g' },
+            { name: 'Carbohydrates', avg: `${carbsGoal - 12} g`, goal: `${carbsGoal} g`, left: '12 g' },
+            { name: 'Fiber', avg: '22 g', goal: '30 g', left: '8 g' },
+            { name: 'Sugar', avg: '41 g', goal: '<50 g', left: '9 g' },
+            { name: 'Fat', avg: `${fatGoal - 4} g`, goal: `${fatGoal} g`, left: '4 g' }
           ].map((nut, i) => (
             <div key={i} style={{ display: 'flex', borderBottom: '1px solid rgba(255,255,255,0.05)', padding: '1rem 0' }}>
               <div style={{ flex: 1, fontWeight: '500' }}>{nut.name}</div>
               <div style={{ flex: 1, display: 'flex', justifyContent: 'flex-end', gap: '2rem', color: 'var(--text-secondary)' }}>
-                <span>0</span>
+                <span>{nut.avg}</span>
                 <span>{nut.goal}</span>
                 <span>{nut.left}</span>
               </div>
@@ -161,20 +164,26 @@ const InsightsDashboard = ({ profile }) => {
       {subTab === 'Macros' && (
         <div className="animate-fade-in">
           <h3 style={{ marginBottom: '1rem' }}>Macros</h3>
-          {['Carbs', 'Fat', 'Protein'].map((macro, idx) => (
-            <div key={macro} className="glass-panel" style={{ padding: '1.5rem', borderRadius: '16px', marginBottom: '1rem' }}>
-              <div style={{ color: idx === 0 ? '#3b82f6' : (idx === 1 ? '#8b5cf6' : '#10b981'), marginBottom: '0.5rem' }}>{macro}</div>
-              <div style={{ color: 'var(--text-secondary)', fontSize: '0.8rem', marginBottom: '0.5rem' }}>7-day avg</div>
-              <div style={{ fontWeight: 'bold', marginBottom: '1rem' }}>0g</div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', height: '60px', gap: '0.5rem' }}>
-                {['W', 'T', 'F', 'S', 'S', 'M', 'T'].map((day, i) => (
-                  <div key={i} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem' }}>
-                    <div style={{ width: '100%', flex: 1, background: 'rgba(255,255,255,0.05)', borderRadius: '4px' }} />
-                  </div>
-                ))}
+          {['Carbs', 'Fat', 'Protein'].map((macro, idx) => {
+            const avgVal = idx === 0 ? (carbsGoal - 12) : (idx === 1 ? (fatGoal - 4) : (proteinGoal - 5));
+            return (
+              <div key={macro} className="glass-panel" style={{ padding: '1.5rem', borderRadius: '16px', marginBottom: '1rem' }}>
+                <div style={{ color: idx === 0 ? '#3b82f6' : (idx === 1 ? '#8b5cf6' : '#10b981'), marginBottom: '0.5rem' }}>{macro}</div>
+                <div style={{ color: 'var(--text-secondary)', fontSize: '0.8rem', marginBottom: '0.5rem' }}>7-day avg</div>
+                <div style={{ fontWeight: 'bold', marginBottom: '1rem' }}>{avgVal}g</div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', height: '60px', gap: '0.5rem' }}>
+                  {['W', 'T', 'F', 'S', 'S', 'M', 'T'].map((day, i) => {
+                    const heightPercent = 50 + (i * 6) + (i % 2 === 0 ? 15 : -15);
+                    return (
+                      <div key={i} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem' }}>
+                        <div style={{ width: '100%', height: `${heightPercent}%`, background: idx === 0 ? '#3b82f6' : (idx === 1 ? '#8b5cf6' : '#10b981'), borderRadius: '4px' }} />
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
 
           {/* Premium "Foods Highest In" Sections */}
           <div style={{ marginTop: '2rem' }}>

@@ -48,8 +48,24 @@ const MeasurementsView = ({ profile, onBack }) => {
 
       {activeTab === 'Steps' && (
         <div className="animate-fade-in">
-          <div style={{ height: '300px', display: 'flex', alignItems: 'center', position: 'relative' }}>
-            <div style={{ width: '100%', borderBottom: '1px solid rgba(255,255,255,0.2)' }}></div>
+          <div style={{ height: '300px', display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', position: 'relative', paddingTop: '2rem' }}>
+            <div style={{ position: 'absolute', top: 0, left: 0, color: 'var(--text-secondary)', fontSize: '0.75rem' }}>10k</div>
+            <div style={{ position: 'absolute', top: '50%', left: 0, transform: 'translateY(-50%)', color: 'var(--text-secondary)', fontSize: '0.75rem' }}>5k</div>
+            <div style={{ width: '100%', borderBottom: '1px dashed rgba(255,255,255,0.2)', position: 'absolute', top: '0', left: '20px' }}></div>
+            <div style={{ width: '100%', borderBottom: '1px dashed rgba(255,255,255,0.2)', position: 'absolute', top: '50%', left: '20px' }}></div>
+            <div style={{ width: '100%', borderBottom: '1px solid rgba(255,255,255,0.5)', position: 'absolute', bottom: '0', left: '20px' }}></div>
+
+            <div style={{ display: 'flex', justifyContent: 'space-around', width: '100%', paddingLeft: '20px', height: '100%', alignItems: 'flex-end', zIndex: 1 }}>
+              {[40, 65, 85, 45, 100, 75].map((h, i) => (
+                <div key={i} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', height: '100%', justifyContent: 'flex-end', gap: '0.5rem' }}>
+                  <div style={{ width: '20px', height: `${h}%`, background: h >= 100 ? '#10b981' : '#3b82f6', borderRadius: '4px 4px 0 0' }}></div>
+                  <span style={{ color: 'var(--text-secondary)', fontSize: '0.7rem' }}>{dates[i].split('/')[1]}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div style={{ textAlign: 'center', marginTop: '2rem', color: 'var(--text-secondary)' }}>
+            Average: <span style={{ fontWeight: 'bold', color: 'white' }}>6,450 steps</span>
           </div>
         </div>
       )}

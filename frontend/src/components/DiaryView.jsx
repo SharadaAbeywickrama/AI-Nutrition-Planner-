@@ -39,15 +39,15 @@ const DiaryView = ({ profile, onNavigate = () => {} }) => {
         <p style={{ color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>Calories</p>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '1rem' }}>
           <div>
-            <span style={{ fontSize: '2rem', fontWeight: 'bold' }}>0</span> <span style={{ color: 'var(--text-secondary)' }}>cal</span>
+            <span style={{ fontSize: '2rem', fontWeight: 'bold' }}>{dailyGoal - 425}</span> <span style={{ color: 'var(--text-secondary)' }}>cal</span>
             <span style={{ color: 'var(--text-secondary)', marginLeft: '0.5rem', fontSize: '0.9rem' }}>/ {dailyGoal}</span>
           </div>
           <div style={{ textAlign: 'right' }}>
-            <span style={{ fontSize: '1.2rem', fontWeight: 'bold' }}>{dailyGoal}</span> <span style={{ color: 'var(--text-secondary)' }}>left</span>
+            <span style={{ fontSize: '1.2rem', fontWeight: 'bold' }}>425</span> <span style={{ color: 'var(--text-secondary)' }}>left</span>
           </div>
         </div>
         <div style={{ height: '8px', background: 'rgba(255,255,255,0.1)', borderRadius: '4px', overflow: 'hidden' }}>
-          <div style={{ height: '100%', width: '0%', background: 'var(--accent-primary)' }} />
+          <div style={{ width: '75%', height: '100%', background: 'linear-gradient(90deg, #3b82f6, #8b5cf6)' }} />
         </div>
       </div>
 
@@ -55,18 +55,18 @@ const DiaryView = ({ profile, onNavigate = () => {} }) => {
       <div className="glass-panel" style={{ padding: '1.5rem', marginBottom: '1.5rem', borderRadius: '16px', display: 'flex', justifyContent: 'space-between' }}>
         <div style={{ flex: 1, paddingRight: '1rem' }}>
           <p style={{ color: 'var(--text-secondary)', marginBottom: '0.5rem', fontSize: '0.9rem' }}>Carbs</p>
-          <p style={{ fontWeight: 'bold', marginBottom: '0.5rem' }}>0 g <span style={{ fontWeight: 'normal', color: 'var(--text-secondary)', fontSize: '0.8rem' }}>/ {carbsGoal}</span></p>
-          <div style={{ height: '6px', background: 'rgba(255,255,255,0.1)', borderRadius: '3px' }}><div style={{ height: '100%', width: '0%', background: '#3b82f6' }}/></div>
+          <p style={{ fontWeight: 'bold', marginBottom: '0.5rem' }}>{carbsGoal - 30} g <span style={{ fontWeight: 'normal', color: 'var(--text-secondary)', fontSize: '0.8rem' }}>/ {carbsGoal}</span></p>
+          <div style={{ height: '6px', background: 'rgba(255,255,255,0.1)', borderRadius: '3px' }}><div style={{ height: '100%', width: '85%', background: '#3b82f6' }}/></div>
         </div>
         <div style={{ flex: 1, padding: '0 0.5rem' }}>
           <p style={{ color: 'var(--text-secondary)', marginBottom: '0.5rem', fontSize: '0.9rem' }}>Fat</p>
-          <p style={{ fontWeight: 'bold', marginBottom: '0.5rem' }}>0 g <span style={{ fontWeight: 'normal', color: 'var(--text-secondary)', fontSize: '0.8rem' }}>/ {fatGoal}</span></p>
-          <div style={{ height: '6px', background: 'rgba(255,255,255,0.1)', borderRadius: '3px' }}><div style={{ height: '100%', width: '0%', background: '#8b5cf6' }}/></div>
+          <p style={{ fontWeight: 'bold', marginBottom: '0.5rem' }}>{fatGoal - 12} g <span style={{ fontWeight: 'normal', color: 'var(--text-secondary)', fontSize: '0.8rem' }}>/ {fatGoal}</span></p>
+          <div style={{ height: '6px', background: 'rgba(255,255,255,0.1)', borderRadius: '3px' }}><div style={{ height: '100%', width: '70%', background: '#8b5cf6' }}/></div>
         </div>
         <div style={{ flex: 1, paddingLeft: '1rem' }}>
           <p style={{ color: 'var(--text-secondary)', marginBottom: '0.5rem', fontSize: '0.9rem' }}>Protein</p>
-          <p style={{ fontWeight: 'bold', marginBottom: '0.5rem' }}>0 g <span style={{ fontWeight: 'normal', color: 'var(--text-secondary)', fontSize: '0.8rem' }}>/ {proteinGoal}</span></p>
-          <div style={{ height: '6px', background: 'rgba(255,255,255,0.1)', borderRadius: '3px' }}><div style={{ height: '100%', width: '0%', background: '#10b981' }}/></div>
+          <p style={{ fontWeight: 'bold', marginBottom: '0.5rem' }}>{proteinGoal - 15} g <span style={{ fontWeight: 'normal', color: 'var(--text-secondary)', fontSize: '0.8rem' }}>/ {proteinGoal}</span></p>
+          <div style={{ height: '6px', background: 'rgba(255,255,255,0.1)', borderRadius: '3px' }}><div style={{ height: '100%', width: '80%', background: '#10b981' }}/></div>
         </div>
       </div>
 
