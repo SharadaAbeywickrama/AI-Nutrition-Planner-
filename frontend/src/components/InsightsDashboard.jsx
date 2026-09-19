@@ -299,6 +299,64 @@ const InsightsDashboard = ({ profile }) => {
         </div>
       )}
 
+      {/* --- GOALS MODAL --- */}
+      {showGoalsModal && (
+        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.8)', zIndex: 100, display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '1rem', backdropFilter: 'blur(5px)' }}>
+          <div className="glass-panel animate-fade-in" style={{ width: '100%', maxWidth: '400px', padding: '2rem', background: 'var(--bg-primary)' }}>
+            <h2 style={{ marginBottom: '1.5rem', fontSize: '1.5rem' }}>Edit Goals</h2>
+            
+            <div className="input-container">
+              <label className="input-label">Daily Calories Goal</label>
+              <input 
+                type="number" 
+                value={localGoals.dailyCalories}
+                onChange={e => setLocalGoals({...localGoals, dailyCalories: parseInt(e.target.value) || 2000})}
+                style={{ padding: '1rem', borderRadius: '12px', border: '1px solid var(--glass-border)', background: 'rgba(255,255,255,0.05)', color: 'white', fontSize: '1.1rem' }}
+              />
+            </div>
+            
+            <div className="input-container" style={{ marginTop: '1.5rem' }}>
+              <label className="input-label">Goal Weight (lbs)</label>
+              <input 
+                type="number" 
+                value={localGoals.goalWeightLbs}
+                onChange={e => setLocalGoals({...localGoals, goalWeightLbs: parseInt(e.target.value) || 140})}
+                style={{ padding: '1rem', borderRadius: '12px', border: '1px solid var(--glass-border)', background: 'rgba(255,255,255,0.05)', color: 'white', fontSize: '1.1rem' }}
+              />
+            </div>
+
+            <div style={{ marginTop: '2rem', marginBottom: '2rem' }}>
+              <label className="input-label" style={{ display: 'block', marginBottom: '1rem' }}>Macro Split</label>
+              <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1rem' }}>
+                <div style={{ flex: localGoals.macroSplit.carbs, height: '12px', background: '#3b82f6', borderRadius: '6px' }} />
+                <div style={{ flex: localGoals.macroSplit.protein, height: '12px', background: '#10b981', borderRadius: '6px' }} />
+                <div style={{ flex: localGoals.macroSplit.fat, height: '12px', background: '#f59e0b', borderRadius: '6px' }} />
+              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '0.5rem', textAlign: 'center', fontSize: '0.85rem' }}>
+                <div style={{ color: '#3b82f6' }}>Carbs<br/>{localGoals.macroSplit.carbs}%</div>
+                <div style={{ color: '#10b981' }}>Protein<br/>{localGoals.macroSplit.protein}%</div>
+                <div style={{ color: '#f59e0b' }}>Fat<br/>{localGoals.macroSplit.fat}%</div>
+              </div>
+            </div>
+
+            <div style={{ display: 'flex', gap: '1rem' }}>
+              <button 
+                onClick={() => setShowGoalsModal(false)}
+                style={{ flex: 1, padding: '1rem', background: 'transparent', color: 'var(--text-secondary)', border: '1px solid var(--glass-border)', borderRadius: '12px', cursor: 'pointer' }}
+              >
+                Cancel
+              </button>
+              <button 
+                onClick={() => setShowGoalsModal(false)}
+                style={{ flex: 1, padding: '1rem', background: '#3b82f6', color: 'white', border: 'none', borderRadius: '12px', cursor: 'pointer', fontWeight: 'bold' }}
+              >
+                Save Goals
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 };
