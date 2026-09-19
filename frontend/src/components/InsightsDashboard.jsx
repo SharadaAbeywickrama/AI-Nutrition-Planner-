@@ -185,35 +185,24 @@ const InsightsDashboard = ({ profile }) => {
             );
           })}
 
-          {/* Premium "Foods Highest In" Sections */}
+          {/* Unlocked "Foods Highest In" Sections */}
           <div style={{ marginTop: '2rem' }}>
-            {['Carbohydrates', 'Fat', 'Protein'].map((macro) => (
-              <div key={`highest-${macro}`} className="glass-panel" style={{ padding: '1.5rem', borderRadius: '16px', marginBottom: '1rem' }}>
+            {[
+              { macro: 'Carbohydrates', color: '#3b82f6', foods: [{name: 'Kithul Roti', val: '45 g'}, {name: 'Kurakkan Roti', val: '42 g'}, {name: 'Red Rice (Samba)', val: '38 g'}] },
+              { macro: 'Fat', color: '#8b5cf6', foods: [{name: 'Pol Sambol (Coconut)', val: '22 g'}, {name: 'Kukul Mas Curry (Chicken)', val: '18 g'}, {name: 'Parippu (Dhal with Coconut Milk)', val: '14 g'}] },
+              { macro: 'Protein', color: '#10b981', foods: [{name: 'Kukul Mas Curry (Chicken)', val: '25 g'}, {name: 'Kakuluwo (Crab Curry)', val: '20 g'}, {name: 'Dhal Curry (Lentils)', val: '12 g'}] }
+            ].map(({macro, color, foods}) => (
+              <div key={`highest-${macro}`} className="glass-panel" style={{ padding: '1.5rem', borderRadius: '16px', marginBottom: '1rem', borderTop: `4px solid ${color}` }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
                   <h3 style={{ fontSize: '1.1rem', margin: 0 }}>Foods Highest in {macro}</h3>
-                  <span style={{ color: '#fbbf24' }}>👑</span>
                 </div>
                 
-                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.75rem', paddingBottom: '0.75rem', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-                  <span>Rice Bowl (example)</span>
-                  <span style={{ color: 'var(--text-secondary)' }}>43 g</span>
-                </div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1.5rem' }}>
-                  <span>Tomato Soup (example)</span>
-                  <span style={{ color: 'var(--text-secondary)' }}>30 g</span>
-                </div>
-
-                <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', marginBottom: '1rem', lineHeight: '1.4' }}>
-                  Go Premium to see which of the foods you've logged rank highest in {macro}
-                </p>
-
-                <button style={{ 
-                  width: '100%', padding: '1rem', background: '#3b82f6', color: 'white', 
-                  border: 'none', borderRadius: '24px', fontWeight: 'bold', 
-                  display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '0.5rem' 
-                }}>
-                  <span style={{ color: '#fbbf24' }}>👑</span> Analyze My Foods
-                </button>
+                {foods.map((food, i) => (
+                  <div key={i} style={{ display: 'flex', justifyContent: 'space-between', marginBottom: i < 2 ? '0.75rem' : '0', paddingBottom: i < 2 ? '0.75rem' : '0', borderBottom: i < 2 ? '1px solid rgba(255,255,255,0.05)' : 'none' }}>
+                    <span style={{ color: 'var(--text-primary)' }}>{i+1}. {food.name}</span>
+                    <span style={{ color: color, fontWeight: 'bold' }}>{food.val}</span>
+                  </div>
+                ))}
               </div>
             ))}
           </div>
