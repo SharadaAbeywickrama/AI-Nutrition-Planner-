@@ -1,20 +1,31 @@
 import os
 import traceback
+import json
+from pathlib import Path
 from fastapi import FastAPI, Depends, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.exceptions import RequestValidationError
+from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
 from typing import List
 from pydantic import BaseModel
-from fastapi.exceptions import RequestValidationError
-from fastapi.responses import JSONResponse
 
-import models, schemas, database, ai_service, rag_service
+import models, schemas, database, rag_service
 from database import engine
+from agents import OrchestratorAgent
 
 # Create database tables
 models.Base.metadata.create_all(bind=engine)
 
-app = FastAPI(title="AI Nutrition Planner API")
+# Load food DB once at startup
+FOOD_DB_PATH = Path(__file__).parent / "data" / "food_database.json"
+with open(FOOD_DB_PATH, "r") as f:
+    FOOD_DATABASE = json.load(f)
+
+# Instantiate the orchestrator (shared, stateless)
+orchestrator = OrchestratorAgent(food_database=FOOD_DATABASE)
+
+app = FastAPI(title="AI Nutrition Planner API — Multi-Agent Edition")
 
 # Allow CORS configured via env var
 ALLOWED_ORIGINS = os.getenv("ALLOWED_ORIGINS", "http://localhost:5173,http://localhost:3000").split(",")
@@ -36,9 +47,17 @@ async def validation_exception_handler(request, exc):
     print(f"VALIDATION ERROR on {request.url}: {detail}")
     return JSONResponse(status_code=422, content={"detail": detail, "hint": "Check field types and required fields"})
 
+
 @app.get("/api/health")
 def health_check():
-    return {"status": "ok", "message": "AI Nutrition Planner API is running"}
+    return {
+        "status": "ok",
+        "message": "AI Nutrition Planner API — Multi-Agent Edition is running",
+        "agents": ["RAGAgent", "NutritionAgent", "SleepAgent", "CoachAgent", "OrchestratorAgent"],
+    }
+
+
+# ── Chat (RAG only) ──────────────────────────────────────────────────────────
 
 class RagQueryRequest(BaseModel):
     query: str
@@ -53,7 +72,8 @@ def rag_chat(request: RagQueryRequest, db: Session = Depends(database.get_db)):
         print(f"RAG Error: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
-# ---- Profile Endpoints ----
+
+# ── Profile Endpoints ────────────────────────────────────────────────────────
 
 @app.get("/api/profile", response_model=schemas.UserProfileResponse)
 def get_profile(db: Session = Depends(database.get_db)):
@@ -71,23 +91,15 @@ def update_profile(profile_data: schemas.UserProfileBase, db: Session = Depends(
     if not profile:
         profile = models.UserProfile()
         db.add(profile)
-    
     for key, value in profile_data.dict(exclude_unset=True).items():
         setattr(profile, key, value)
-    
     db.commit()
     db.refresh(profile)
     return profile
 
-import json
-from pathlib import Path
 
-# Load food DB
-FOOD_DB_PATH = Path(__file__).parent / "data" / "food_database.json"
-with open(FOOD_DB_PATH, "r") as f:
-    FOOD_DATABASE = json.load(f)
+# ── Food Endpoints ───────────────────────────────────────────────────────────
 
-# ---- Food Endpoints ----
 @app.get("/api/foods")
 def get_foods():
     return FOOD_DATABASE
@@ -97,96 +109,59 @@ def search_foods(q: str = ""):
     if not q:
         return FOOD_DATABASE
     q_lower = q.lower()
-    return [f for f in FOOD_DATABASE if q_lower in f['name'].lower() or q_lower in f.get('category','').lower()]
+    return [f for f in FOOD_DATABASE if q_lower in f['name'].lower() or q_lower in f.get('category', '').lower()]
 
 @app.get("/api/foods/categories")
 def get_categories():
     cats = list(dict.fromkeys(f.get('category', 'Other') for f in FOOD_DATABASE))
     return {"categories": cats}
 
-# ---- Analysis Endpoints ----
+
+# ── Analysis Endpoint (Multi-Agent Pipeline) ─────────────────────────────────
 
 @app.post("/api/analyze", response_model=schemas.AnalysisRecordResponse)
 def analyze_user_diet(diet: schemas.DietInput, db: Session = Depends(database.get_db)):
     if not diet.daily_logs:
         raise HTTPException(status_code=400, detail="Diet log cannot be empty.")
-    
+
     try:
-        # Get user profile context
+        # Fetch user profile for personalisation
         profile = db.query(models.UserProfile).first()
         profile_context = None
         if profile:
             profile_context = {
-                "age": profile.age,
-                "sex": profile.sex,
-                "weight_kg": profile.weight_kg,
-                "height_cm": profile.height_cm,
+                "age":           profile.age,
+                "sex":           profile.sex,
+                "weight_kg":     profile.weight_kg,
+                "height_cm":     profile.height_cm,
                 "activity_level": profile.activity_level,
-                "dietary_goal": profile.dietary_goal
+                "dietary_goal":  profile.dietary_goal,
             }
-        
-        # 1. Deterministic Nutrient Aggregation
-        aggregated_nutrients = {}
-        moods_logged = []
 
-        for log in diet.daily_logs:
-            if log.mood_trigger and log.mood_trigger not in moods_logged:
-                moods_logged.append(log.mood_trigger)
-            for item in log.foods:
-                # Find food in DB — support both int and string IDs
-                db_food = next((f for f in FOOD_DATABASE if str(f["id"]) == str(item.food_id)), None)
-                if db_food:
-                    # Support new flat schema (protein_g, fat_g...) and legacy nested schema
-                    if "nutrients" in db_food:
-                        nutrient_map = db_food["nutrients"]
-                    else:
-                        nutrient_map = {
-                            "Calories": db_food.get("calories", 0),
-                            "Protein": db_food.get("protein_g", 0),
-                            "Fat": db_food.get("fat_g", 0),
-                            "Carbs": db_food.get("carbohydrates_g", 0),
-                            "Fiber": db_food.get("fiber_g", 0),
-                            "Sugar": db_food.get("sugar_g", 0),
-                            "Sodium": db_food.get("sodium_mg", 0),
-                            "Iron": db_food.get("iron_mg", 0),
-                            "Calcium": db_food.get("calcium_mg", 0),
-                            "Vitamin B12": db_food.get("vitamin_b12_mcg", 0),
-                        }
-                    for nutrient, amount in nutrient_map.items():
-                        aggregated_nutrients[nutrient] = aggregated_nutrients.get(nutrient, 0) + (amount * item.quantity_multiplier)
-                else:
-                    print(f"WARNING: food_id '{item.food_id}' not found in FOOD_DATABASE")
-
-        print(f"DEBUG aggregated_nutrients: {aggregated_nutrients}")
-
-        # 2. Convert structured input to a string for DB storage
-        diet_input_str = json.dumps([log.dict() for log in diet.daily_logs])
-        
-        # 3. Call LLM
-        ai_result = ai_service.analyze_diet(
-            diet_input_str, 
-            diet.days_logged, 
-            aggregated_nutrients, 
-            moods_logged, 
-            profile_context
+        # ── Run the multi-agent pipeline ──────────────────────────────────────
+        result = orchestrator.run(
+            daily_logs=diet.daily_logs,
+            days_logged=diet.days_logged,
+            profile_context=profile_context,
         )
-        print(f"DEBUG ai_result keys: {list(ai_result.keys()) if isinstance(ai_result, dict) else type(ai_result)}")
-        
-        # 4. Save to database
+
+        # Persist to database
+        diet_input_str = json.dumps([log.dict() for log in diet.daily_logs])
         db_record = models.AnalysisRecord(
             diet_input=diet_input_str,
             days_logged=diet.days_logged,
-            analysis_result=ai_result
+            analysis_result=result,
         )
         db.add(db_record)
         db.commit()
         db.refresh(db_record)
-        
+
         return db_record
 
     except Exception as e:
         traceback.print_exc()
         raise HTTPException(status_code=500, detail=f"Analysis failed: {str(e)}")
+
 
 @app.get("/api/history", response_model=List[schemas.AnalysisRecordResponse])
 def get_analysis_history(db: Session = Depends(database.get_db)):
