@@ -46,20 +46,26 @@ const InsightsDashboard = ({ profile }) => {
       {subTab === 'Overview' && (
         <div className="animate-fade-in">
           {/* Calories Chart */}
-          <div className="glass-panel" style={{ padding: '1.5rem', borderRadius: '16px', marginBottom: '1.5rem' }}>
+          <div className="glass-panel" style={{ padding: '1.5rem', borderRadius: '16px', marginBottom: '1.5rem', cursor: 'pointer', transition: 'transform 0.2s', ':hover': {transform: 'translateY(-2px)'} }} onClick={() => setSubTab('Calories')}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
               <span style={{ fontSize: '1.2rem', fontWeight: 'bold' }}>Calories</span>
               <span style={{ color: 'var(--text-secondary)' }}>&gt;</span>
             </div>
-            <div style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', marginBottom: '0.5rem' }}>7-day avg</div>
-            <div style={{ fontSize: '1.5rem', fontWeight: 'bold', marginBottom: '1rem' }}>{(dailyGoal - 85).toLocaleString()} cal</div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', height: '100px', gap: '0.5rem' }}>
+            <div style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', marginBottom: '0.5rem' }}>7-day net avg</div>
+            <div style={{ fontSize: '1.5rem', fontWeight: 'bold', marginBottom: '1.5rem' }}>{(dailyGoal - 85).toLocaleString()} <span style={{fontSize: '1rem', color: 'var(--text-secondary)', fontWeight: 'normal'}}>cal</span></div>
+            <div style={{ position: 'relative', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', height: '100px', gap: '0.5rem' }}>
+              {/* Goal Line Background */}
+              <div style={{ position: 'absolute', top: '25%', left: 0, right: 0, borderTop: '1px dashed rgba(255,255,255,0.2)' }}>
+                <span style={{ position: 'absolute', top: '-18px', right: 0, fontSize: '0.7rem', color: 'var(--text-secondary)' }}>Goal: {dailyGoal}</span>
+              </div>
               {['W', 'T', 'F', 'S', 'S', 'M', 'T'].map((day, i) => {
-                const heightPercent = 60 + (i * 5) + (i % 2 === 0 ? 10 : -10);
+                const isToday = i === 6;
+                const val = (dailyGoal - 85) + (i % 2 === 0 ? 120 : -90) + (i * 15);
+                const heightPercent = (val / (dailyGoal + 500)) * 100;
                 return (
-                  <div key={i} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem' }}>
-                    <div style={{ width: '100%', height: `${heightPercent}%`, background: '#3b82f6', borderRadius: '4px' }} />
-                    <span style={{ color: 'var(--text-secondary)', fontSize: '0.75rem' }}>{day}</span>
+                  <div key={i} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem', zIndex: 1 }}>
+                    <div style={{ width: '100%', height: `${heightPercent}%`, background: isToday ? '#3b82f6' : 'rgba(59, 130, 246, 0.3)', borderRadius: '4px' }} />
+                    <span style={{ color: isToday ? 'white' : 'var(--text-secondary)', fontSize: '0.75rem', fontWeight: isToday ? 'bold' : 'normal' }}>{day}</span>
                   </div>
                 );
               })}
@@ -67,43 +73,66 @@ const InsightsDashboard = ({ profile }) => {
           </div>
 
           {/* Weight */}
-          <div className="glass-panel" style={{ padding: '1.5rem', borderRadius: '16px', marginBottom: '1.5rem' }}>
+          <div className="glass-panel" style={{ padding: '1.5rem', borderRadius: '16px', marginBottom: '1.5rem', cursor: 'pointer', transition: 'transform 0.2s', ':hover': {transform: 'translateY(-2px)'} }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
               <span style={{ fontSize: '1.2rem', fontWeight: 'bold' }}>Weight</span>
               <span style={{ color: 'var(--text-secondary)' }}>&gt;</span>
             </div>
-            <div style={{ display: 'flex', gap: '2rem' }}>
-              <div style={{ flex: 1 }}>
-                <div style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', marginBottom: '0.25rem' }}>Start</div>
-                <div style={{ fontWeight: 'bold', marginBottom: '1rem' }}>{startWeightLbs} lbs</div>
+            
+            <div style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap' }}>
+              <div style={{ flex: '1 1 150px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1rem', paddingBottom: '0.5rem', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+                  <div style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>Start</div>
+                  <div style={{ fontWeight: 'bold' }}>{startWeightLbs} lbs</div>
+                </div>
                 
-                <div style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', marginBottom: '0.25rem' }}>Current (Today)</div>
-                <div style={{ fontWeight: 'bold', marginBottom: '1rem' }}>{currentWeightLbs} lbs</div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1rem', paddingBottom: '0.5rem', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+                  <div style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>Current</div>
+                  <div style={{ fontWeight: 'bold' }}>{currentWeightLbs} lbs</div>
+                </div>
                 
-                <div style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', marginBottom: '0.25rem' }}>Change</div>
-                <div style={{ fontWeight: 'bold' }}>{currentWeightLbs - startWeightLbs} lbs</div>
+                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <div style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>Change</div>
+                  <div style={{ fontWeight: 'bold', color: 'var(--success)' }}>{currentWeightLbs - startWeightLbs} lbs</div>
+                </div>
               </div>
-              <div style={{ flex: 2, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                <div style={{ borderTop: '1px solid rgba(255,255,255,0.1)', position: 'relative', height: '30px' }}>
-                  <span style={{ position: 'absolute', top: '-10px', left: 0, fontSize: '0.75rem', color: 'var(--text-secondary)' }}>{startWeightLbs + 5}</span>
-                </div>
-                <div style={{ borderTop: '1px solid rgba(255,255,255,0.1)', position: 'relative', height: '30px' }}>
-                  <span style={{ position: 'absolute', top: '-10px', left: 0, fontSize: '0.75rem', color: 'var(--text-secondary)' }}>{startWeightLbs}</span>
-                </div>
-                <div style={{ borderTop: '1px solid rgba(255,255,255,0.1)', position: 'relative', height: '30px', display: 'flex', alignItems: 'flex-start', justifyContent: 'center' }}>
-                  <span style={{ position: 'absolute', top: '-10px', left: 0, fontSize: '0.75rem', color: 'var(--text-secondary)' }}>{currentWeightLbs}</span>
-                  <div style={{ width: '12px', height: '12px', border: '3px solid var(--success)', borderRadius: '50%', background: 'var(--bg-dark)', marginTop: '-6px' }} />
-                </div>
-                <div style={{ borderTop: '1px solid rgba(255,255,255,0.1)', position: 'relative', height: '30px' }}>
-                  <span style={{ position: 'absolute', top: '-10px', left: 0, fontSize: '0.75rem', color: 'var(--text-secondary)' }}>{currentWeightLbs - 5}</span>
-                </div>
-                <div style={{ textAlign: 'center', color: 'var(--text-secondary)', fontSize: '0.75rem' }}>Today</div>
+
+              {/* Real SVG Sparkline Chart */}
+              <div style={{ flex: '1 1 200px', position: 'relative', height: '140px' }}>
+                {/* Y-Axis Labels */}
+                <div style={{ position: 'absolute', top: 0, left: 0, fontSize: '0.75rem', color: 'var(--text-secondary)' }}>{startWeightLbs + 5}</div>
+                <div style={{ position: 'absolute', top: '50%', transform: 'translateY(-50%)', left: 0, fontSize: '0.75rem', color: 'var(--text-secondary)' }}>{startWeightLbs}</div>
+                <div style={{ position: 'absolute', bottom: '20px', left: 0, fontSize: '0.75rem', color: 'var(--text-secondary)' }}>{currentWeightLbs - 2}</div>
+                
+                <svg viewBox="0 0 200 100" style={{ width: '100%', height: 'calc(100% - 20px)', paddingLeft: '30px', overflow: 'visible' }} preserveAspectRatio="none">
+                  {/* Grid Lines */}
+                  <line x1="0" y1="10" x2="200" y2="10" stroke="rgba(255,255,255,0.05)" strokeWidth="1" strokeDasharray="4,4"/>
+                  <line x1="0" y1="50" x2="200" y2="50" stroke="rgba(255,255,255,0.05)" strokeWidth="1" strokeDasharray="4,4"/>
+                  <line x1="0" y1="90" x2="200" y2="90" stroke="rgba(255,255,255,0.05)" strokeWidth="1" strokeDasharray="4,4"/>
+                  
+                  {/* Data Line */}
+                  <path 
+                    d="M 0 50 Q 50 60, 100 70 T 200 85" 
+                    fill="none" 
+                    stroke="var(--success)" 
+                    strokeWidth="3" 
+                    strokeLinecap="round" 
+                  />
+                  
+                  {/* Current Weight Point */}
+                  <circle cx="200" cy="85" r="5" fill="var(--bg-primary)" stroke="var(--success)" strokeWidth="3" />
+                  
+                  {/* Today Label */}
+                  <text x="200" y="105" fontSize="10" fill="var(--text-secondary)" textAnchor="middle">Today</text>
+                </svg>
               </div>
             </div>
           </div>
 
           <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
-            <span style={{ color: '#3b82f6', fontWeight: 'bold', cursor: 'pointer' }}>Manage my goals</span>
+            <button className="btn-primary" style={{ background: 'rgba(255,255,255,0.05)', color: 'var(--text-primary)', border: '1px solid var(--glass-border)' }}>
+              Manage My Goals
+            </button>
           </div>
         </div>
       )}
