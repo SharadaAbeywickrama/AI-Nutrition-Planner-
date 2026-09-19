@@ -2,16 +2,25 @@ import React, { useState } from 'react';
 
 const InsightsDashboard = ({ profile }) => {
   const [subTab, setSubTab] = useState('Overview');
+  const [showGoalsModal, setShowGoalsModal] = useState(false);
+  
+  // Use local state so the user can immediately see updates when they "Save" their goals
+  const [localGoals, setLocalGoals] = useState({
+    dailyCalories: profile?.goal_weight_kg ? 1850 : 2000,
+    goalWeightLbs: profile?.goal_weight_kg ? Math.round(profile.goal_weight_kg * 2.20462) : 140,
+    macroSplit: { carbs: 50, protein: 20, fat: 30 }
+  });
 
-  const dailyGoal = profile?.goal_weight_kg ? 1850 : 2000;
+  const dailyGoal = localGoals.dailyCalories;
   const weeklyGoal = dailyGoal * 7;
   const netAverage = dailyGoal - 85; 
   const underWeeklyGoal = weeklyGoal - (netAverage * 7);
 
-  // Dynamic Macro Targets (50% Carbs, 30% Fat, 20% Protein)
-  const proteinGoal = Math.round((dailyGoal * 0.20) / 4);
-  const carbsGoal = Math.round((dailyGoal * 0.50) / 4);
-  const fatGoal = Math.round((dailyGoal * 0.30) / 9);
+  // Dynamic Macro Targets based on local split
+  const proteinGoal = Math.round((dailyGoal * (localGoals.macroSplit.protein / 100)) / 4);
+  const carbsGoal = Math.round((dailyGoal * (localGoals.macroSplit.carbs / 100)) / 4);
+  const fatGoal = Math.round((dailyGoal * (localGoals.macroSplit.fat / 100)) / 9);
+  
   const currentWeightLbs = profile?.weight_kg ? Math.round(profile.weight_kg * 2.20462) : 150;
   const startWeightLbs = currentWeightLbs + 5; // Mock starting weight for demonstration
 
@@ -130,7 +139,7 @@ const InsightsDashboard = ({ profile }) => {
           </div>
 
           <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
-            <button className="btn-primary" style={{ background: 'rgba(255,255,255,0.05)', color: 'var(--text-primary)', border: '1px solid var(--glass-border)' }}>
+            <button onClick={() => setShowGoalsModal(true)} className="btn-primary" style={{ background: 'rgba(255,255,255,0.05)', color: 'var(--text-primary)', border: '1px solid var(--glass-border)' }}>
               Manage My Goals
             </button>
           </div>
