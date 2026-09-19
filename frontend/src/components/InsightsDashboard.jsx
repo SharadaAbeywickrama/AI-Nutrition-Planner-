@@ -116,18 +116,48 @@ const InsightsDashboard = ({ profile }) => {
               <button style={{ padding: '0.5rem 1.5rem', background: '#3b82f6', border: 'none', color: 'white', fontWeight: 'bold' }}>Net</button>
             </div>
           </div>
-          
-          <div style={{ borderBottom: '1px solid rgba(255,255,255,0.05)', paddingBottom: '1rem', marginBottom: '1rem' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.5rem 0' }}>
-              <span style={{ color: 'var(--text-secondary)' }}>Net Calories Under Weekly Goal</span>
-              <span style={{ fontWeight: 'bold' }}>{underWeeklyGoal.toLocaleString()}</span>
+
+          <div className="glass-panel" style={{ padding: '1.5rem', borderRadius: '16px', marginBottom: '1.5rem' }}>
+            <div style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', marginBottom: '0.5rem' }}>7-day net average</div>
+            <div style={{ fontSize: '1.5rem', fontWeight: 'bold', marginBottom: '1.5rem' }}>{netAverage.toLocaleString()} <span style={{fontSize: '1rem', color: 'var(--text-secondary)', fontWeight: 'normal'}}>cal</span></div>
+            
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', height: '120px', gap: '0.5rem', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '0.5rem' }}>
+              {['W', 'T', 'F', 'S', 'S', 'M', 'T'].map((day, i) => {
+                const isToday = i === 6;
+                const val = (dailyGoal - 85) + (i % 2 === 0 ? 120 : -90) + (i * 15);
+                const heightPercent = (val / (dailyGoal + 500)) * 100;
+                return (
+                  <div key={i} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem' }}>
+                    <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', opacity: 0.8 }}>{val}</div>
+                    <div style={{ 
+                      width: '100%', 
+                      height: `${heightPercent}%`, 
+                      background: isToday ? '#3b82f6' : 'rgba(59, 130, 246, 0.4)', 
+                      borderRadius: '4px 4px 0 0',
+                      transition: 'height 0.3s ease'
+                    }} />
+                    <div style={{ color: isToday ? 'white' : 'var(--text-secondary)', fontSize: '0.75rem', fontWeight: isToday ? 'bold' : 'normal' }}>{day}</div>
+                  </div>
+                );
+              })}
             </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.5rem 0' }}>
-              <span style={{ color: 'var(--text-secondary)' }}>Net Average</span>
+            
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '0.5rem', fontSize: '0.75rem', color: 'var(--text-secondary)' }}>
+              <span>Goal: {dailyGoal.toLocaleString()} cal</span>
+            </div>
+          </div>
+          
+          <div className="glass-panel" style={{ borderRadius: '16px', overflow: 'hidden' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', padding: '1.25rem 1.5rem', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+              <span style={{ color: 'var(--text-primary)', fontWeight: '500' }}>Net Calories Under Weekly Goal</span>
+              <span style={{ fontWeight: 'bold', color: '#10b981' }}>{underWeeklyGoal.toLocaleString()}</span>
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', padding: '1.25rem 1.5rem', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+              <span style={{ color: 'var(--text-primary)', fontWeight: '500' }}>Net Average</span>
               <span style={{ fontWeight: 'bold' }}>{netAverage.toLocaleString()}</span>
             </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.5rem 0' }}>
-              <span style={{ color: 'var(--text-secondary)' }}>Goal</span>
+            <div style={{ display: 'flex', justifyContent: 'space-between', padding: '1.25rem 1.5rem' }}>
+              <span style={{ color: 'var(--text-primary)', fontWeight: '500' }}>Goal</span>
               <span style={{ color: '#3b82f6', fontWeight: 'bold' }}>{dailyGoal.toLocaleString()}</span>
             </div>
           </div>
