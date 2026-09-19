@@ -135,27 +135,49 @@ const InsightsDashboard = ({ profile }) => {
       )}
 
       {subTab === 'Nutrients' && (
-        <div className="animate-fade-in">
-          <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '2rem', marginBottom: '1rem', color: 'var(--text-secondary)', fontSize: '0.9rem' }}>
+        <div className="animate-fade-in glass-panel" style={{ padding: '1.5rem', borderRadius: '16px' }}>
+          {/* Header Row */}
+          <div style={{ 
+            display: 'grid', 
+            gridTemplateColumns: '2fr 1fr 1fr 1fr', 
+            gap: '1rem', 
+            marginBottom: '1rem', 
+            color: 'var(--text-secondary)', 
+            fontSize: '0.9rem',
+            textAlign: 'right',
+            borderBottom: '1px solid rgba(255,255,255,0.1)',
+            paddingBottom: '0.75rem'
+          }}>
+            <span style={{ textAlign: 'left' }}>Nutrient</span>
             <span>Avg</span>
             <span>Goal</span>
             <span>Left</span>
           </div>
 
+          {/* Data Rows */}
           {[
-            { name: 'Protein', avg: `${proteinGoal - 5} g`, goal: `${proteinGoal} g`, left: '5 g' },
-            { name: 'Carbohydrates', avg: `${carbsGoal - 12} g`, goal: `${carbsGoal} g`, left: '12 g' },
-            { name: 'Fiber', avg: '22 g', goal: '30 g', left: '8 g' },
-            { name: 'Sugar', avg: '41 g', goal: '<50 g', left: '9 g' },
-            { name: 'Fat', avg: `${fatGoal - 4} g`, goal: `${fatGoal} g`, left: '4 g' }
+            { name: 'Protein', avg: `${proteinGoal - 5} g`, goal: `${proteinGoal} g`, left: '5 g', color: '#10b981' },
+            { name: 'Carbohydrates', avg: `${carbsGoal - 12} g`, goal: `${carbsGoal} g`, left: '12 g', color: '#3b82f6' },
+            { name: 'Fiber', avg: '22 g', goal: '30 g', left: '8 g', color: '#8b5cf6' },
+            { name: 'Sugar', avg: '41 g', goal: '<50 g', left: '9 g', color: '#ef4444' },
+            { name: 'Fat', avg: `${fatGoal - 4} g`, goal: `${fatGoal} g`, left: '4 g', color: '#f59e0b' }
           ].map((nut, i) => (
-            <div key={i} style={{ display: 'flex', borderBottom: '1px solid rgba(255,255,255,0.05)', padding: '1rem 0' }}>
-              <div style={{ flex: 1, fontWeight: '500' }}>{nut.name}</div>
-              <div style={{ flex: 1, display: 'flex', justifyContent: 'flex-end', gap: '2rem', color: 'var(--text-secondary)' }}>
-                <span>{nut.avg}</span>
-                <span>{nut.goal}</span>
-                <span>{nut.left}</span>
+            <div key={i} style={{ 
+              display: 'grid', 
+              gridTemplateColumns: '2fr 1fr 1fr 1fr', 
+              gap: '1rem', 
+              borderBottom: i < 4 ? '1px solid rgba(255,255,255,0.05)' : 'none', 
+              padding: '1rem 0',
+              alignItems: 'center',
+              textAlign: 'right'
+            }}>
+              <div style={{ textAlign: 'left', fontWeight: '500', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <span style={{ display: 'inline-block', width: '8px', height: '8px', borderRadius: '50%', background: nut.color }}></span>
+                {nut.name}
               </div>
+              <div style={{ fontWeight: 'bold', color: 'var(--text-primary)' }}>{nut.avg}</div>
+              <div style={{ color: 'var(--text-secondary)' }}>{nut.goal}</div>
+              <div style={{ color: nut.color, fontWeight: '600' }}>{nut.left}</div>
             </div>
           ))}
         </div>
