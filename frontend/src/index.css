@@ -293,3 +293,30 @@ textarea.premium-input::placeholder {
   margin-right: 0.5rem;
   margin-bottom: 0.5rem;
 }
+
+/* Print Styles */
+@media print {
+  body {
+    background: white;
+    color: black;
+  }
+  .no-print, .btn-primary, button {
+    display: none !important;
+  }
+  .glass-panel, .deficiency-card {
+    background: white;
+    border: 1px solid #ddd;
+    box-shadow: none;
+    break-inside: avoid;
+    color: black;
+  }
+  .text-gradient {
+    background: none;
+    -webkit-text-fill-color: black;
+    color: black;
+  }
+  * {
+    color: black !important;
+  }
+}
+

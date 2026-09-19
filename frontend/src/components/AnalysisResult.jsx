@@ -180,13 +180,16 @@ const AnalysisResult = ({ result, onReset }) => {
       )}
 
       {/* Action Buttons */}
-      <div style={{ marginTop: '3rem', textAlign: 'center', display: 'flex', gap: '1rem', justifyContent: 'center' }}>
+      <div className="no-print" style={{ marginTop: '3rem', textAlign: 'center', display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
         <button onClick={onReset} className="btn-primary" style={{ background: 'rgba(255,255,255,0.05)', color: 'var(--text-primary)', border: '1px solid var(--glass-border)' }}>
           <RefreshCw size={18} />
           Analyze Another Week
         </button>
         <button onClick={() => { navigator.clipboard.writeText(result.analysis_result?.overall_summary || ''); alert('Summary copied!'); }} className="btn-primary" style={{ background: 'rgba(59,130,246,0.15)', color: '#3b82f6', border: '1px solid #3b82f6' }}>
           📋 Copy Summary
+        </button>
+        <button onClick={() => window.print()} className="btn-primary" style={{ background: 'rgba(16, 185, 129, 0.15)', color: '#10b981', border: '1px solid #10b981' }}>
+          🖨️ Save as PDF
         </button>
       </div>
 
